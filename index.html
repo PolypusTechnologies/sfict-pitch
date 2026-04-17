@@ -3,825 +3,805 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SF-ICT × AI — ZakelijkWerken 4.0</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>SAGE — SF-ICT AI Intelligence Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #f5f3ee;
-  --ink: #0e0e0e;
-  --ink2: #3a3a3a;
-  --muted: #8a8a8a;
-  --blue: #0054a6;
-  --blue-light: #e8f0fb;
-  --green: #0a7c4f;
-  --green-light: #e4f5ee;
-  --amber: #b45309;
-  --amber-light: #fef3c7;
-  --red: #c0392b;
-  --border: #d8d4cc;
-  --white: #ffffff;
-  --card: #ffffff;
-  --surface: #f0ede6;
+:root{
+  --bg:#EAF2FB;--ink:#232430;--ink2:#3d3c4e;--muted:#766A86;
+  --blue:#1BA2D2;--blue-lt:#d6f0f9;--blue-mid:#8dd0ea;
+  --blue-dark:#0477AE;
+  --pink:#E4067D;--pink-lt:#fce6f2;
+  --green:#0a7040;--green-lt:#e3f2ea;
+  --amber:#b45000;--amber-lt:#fef0e3;
+  --red:#b52a1c;--red-lt:#fde8e6;
+  --border:#c8dff0;--white:#ffffff;--surface:#dbeaf6;
+  --purple:#766A86;--purple-lt:#f0edf4;
 }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--ink);overflow:hidden;height:100vh;font-size:14px}
+.deck{width:100vw;height:100vh;position:relative}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;padding:52px 68px;opacity:0;transition:opacity .35s}
+.slide.active{display:flex;opacity:1}
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* NAV */
+.nav{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:14px;z-index:100;background:var(--ink);padding:9px 18px;border-radius:40px;border:1px solid rgba(27,162,210,.2)}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:all .2s}
+.dot.on{background:linear-gradient(90deg,#1BA2D2,#E4067D);width:18px;border-radius:3px}
+.nbtn{background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:15px;padding:0 2px;transition:color .15s}
+.nbtn:hover{color:#1BA2D2}
+.nnum{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.08em}
 
-body {
-  font-family: 'Instrument Sans', sans-serif;
-  background: var(--bg);
-  color: var(--ink);
-  overflow: hidden;
-  height: 100vh;
-  cursor: default;
+/* TYPE */
+.display{font-family:'Syne',sans-serif;font-weight:800;line-height:.93}
+.heading{font-family:'Syne',sans-serif;font-weight:700;line-height:1.08}
+.mono{font-family:'JetBrains Mono',monospace}
+
+/* TAGS */
+.tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:3px 9px;border-radius:4px;font-weight:500}
+.t-blue{background:#d6f0f9;color:#0477AE}
+.t-green{background:var(--green-lt);color:var(--green)}
+.t-amber{background:var(--amber-lt);color:var(--amber)}
+.t-ink{background:var(--ink);color:white}
+.t-red{background:var(--red-lt);color:var(--red)}
+.t-pink{background:var(--pink-lt);color:var(--pink)}
+.t-purple{background:#f0edf4;color:#766A86}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:20px}
+.csm{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+
+/* ANIMS */
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.f1{animation:up .45s .08s both}
+.f2{animation:up .45s .18s both}
+.f3{animation:up .45s .3s both}
+.f4{animation:up .45s .44s both}
+.f5{animation:up .45s .58s both}
+
+/* LIVE PULSE */
+@keyframes pd{0%,100%{opacity:1}50%{opacity:.3}}
+.live{width:7px;height:7px;border-radius:50%;background:var(--blue);display:inline-block;animation:pd 1.4s infinite}
+
+/* COVER */
+#s0{background:var(--ink);justify-content:center}
+#s0 .grid-bg{position:absolute;inset:0;opacity:.04;background-image:linear-gradient(rgba(27,162,210,.8)1px,transparent 1px),linear-gradient(90deg,rgba(27,162,210,.8)1px,transparent 1px);background-size:44px 44px}
+.accent-line{width:48px;height:3px;background:linear-gradient(90deg,var(--blue),var(--pink));border-radius:2px;margin-bottom:28px}
+
+/* SF-ICT LOGO */
+.sfict-logo{display:inline-flex;align-items:center;gap:8px;margin-bottom:32px}
+.sfict-mark{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;background:linear-gradient(135deg,#1BA2D2,#E4067D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.01em}
+.sfict-divider{width:1px;height:18px;background:rgba(255,255,255,.2)}
+.sfict-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.35);letter-spacing:.12em;text-transform:uppercase}
+
+/* ARCH DIAGRAM */
+.arch{display:flex;flex-direction:column;gap:0;position:relative}
+.arch-layer{display:flex;align-items:stretch;gap:0;height:72px;position:relative}
+.arch-label{width:120px;display:flex;align-items:center;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:.04em;padding-right:12px;flex-shrink:0;text-align:right;justify-content:flex-end}
+.arch-blocks{display:flex;gap:6px;flex:1;align-items:stretch}
+.arch-block{flex:1;border-radius:6px;display:flex;flex-direction:column;justify-content:center;padding:8px 12px;border:1px solid transparent}
+.arch-connector{width:120px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:18px}
+
+/* TICKET DEMO */
+.tkt{border:1px solid var(--border);border-radius:8px;padding:12px 14px;background:var(--white);position:relative;transition:all .3s}
+.tkt-client{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:3px}
+.tkt-issue{font-size:13px;font-weight:500;margin-bottom:8px}
+.ai-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ai-chip{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-family:'JetBrains Mono',monospace;padding:3px 8px;border-radius:4px;background:#d6f0f9;color:#0477AE}
+.ai-chip::before{content:'◈';font-size:9px}
+
+/* PROGRESS */
+.bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin:5px 0}
+.bfill{height:100%;border-radius:3px;transition:width .8s ease}
+
+/* VAGUE DECODER */
+.vague-box{background:#dbeaf6;border-radius:8px;padding:14px;border-left:3px solid var(--muted)}
+.decoded-box{background:#d6f0f9;border-radius:8px;padding:14px;border-left:3px solid #1BA2D2}
+
+/* TICKER */
+.ticker-wrap{background:var(--ink);border-radius:6px;padding:7px 14px;overflow:hidden}
+.ticker-inner{display:flex;gap:28px;animation:tick 22s linear infinite;white-space:nowrap}
+@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ti{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.4)}
+.ti span{color:#1BA2D2}
+
+/* CONTRACT */
+.ccard{background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:22px;position:relative}
+.ccard.best{border-color:#0477AE}
+.ccard.best::before{content:'RECOMMENDED';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--blue);color:white;font-size:9px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;padding:3px 10px;border-radius:4px}
+
+/* SF-ICT logo on all slides except cover */
+.slide:not(#s0)::before{
+  content:'SF:';
+  position:absolute;top:20px;right:24px;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:14px;
+  background:linear-gradient(135deg,#1BA2D2,#E4067D);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;opacity:.6;z-index:10;
 }
-
-/* ── DECK STRUCTURE ── */
-.deck { width: 100vw; height: 100vh; position: relative; }
-.slide {
-  position: absolute; inset: 0;
-  display: none; flex-direction: column;
-  padding: 60px 72px;
-  opacity: 0; transition: opacity .4s ease;
-}
-.slide.active { display: flex; opacity: 1; }
-
-/* ── NAV ── */
-.nav {
-  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
-  display: flex; align-items: center; gap: 16px; z-index: 100;
-  background: var(--ink); padding: 10px 20px; border-radius: 40px;
-}
-.nav-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: rgba(255,255,255,.3); cursor: pointer; transition: all .2s;
-}
-.nav-dot.active { background: white; width: 20px; border-radius: 3px; }
-.nav-btn {
-  background: none; border: none; color: white; cursor: pointer;
-  font-size: 16px; padding: 0 4px; opacity: .7; transition: opacity .2s;
-}
-.nav-btn:hover { opacity: 1; }
-.slide-num {
-  font-family: 'JetBrains Mono', monospace; font-size: 11px;
-  color: rgba(255,255,255,.4); letter-spacing: .1em;
-}
-
-/* ── TYPOGRAPHY ── */
-.display { font-family: 'Syne', sans-serif; font-weight: 800; line-height: .95; }
-.heading { font-family: 'Syne', sans-serif; font-weight: 700; line-height: 1.1; }
-.mono { font-family: 'JetBrains Mono', monospace; }
-
-/* ── TAGS ── */
-.tag {
-  display: inline-block; font-family: 'JetBrains Mono', monospace;
-  font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
-  padding: 4px 10px; border-radius: 4px; font-weight: 500;
-}
-.tag-blue { background: var(--blue-light); color: var(--blue); }
-.tag-green { background: var(--green-light); color: var(--green); }
-.tag-amber { background: var(--amber-light); color: var(--amber); }
-.tag-ink { background: var(--ink); color: white; }
-
-/* ── CARDS ── */
-.card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 12px; padding: 24px;
-}
-.card-sm { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
-
-/* ── GRIDS ── */
-.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
-.g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
-
-/* ── METRIC ── */
-.metric-num {
-  font-family: 'Syne', sans-serif; font-weight: 800;
-  font-size: 44px; line-height: 1; color: var(--blue);
-}
-.metric-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
-.metric-sub { font-size: 13px; color: var(--ink2); margin-top: 6px; }
-
-/* ── PROGRESS ── */
-.bar-wrap { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin: 6px 0; }
-.bar-fill { height: 100%; border-radius: 3px; }
-
-/* ── TIMELINE ── */
-.timeline { display: flex; flex-direction: column; gap: 0; }
-.tl-item { display: flex; gap: 20px; }
-.tl-left { display: flex; flex-direction: column; align-items: center; width: 32px; flex-shrink: 0; }
-.tl-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--blue); flex-shrink: 0; margin-top: 4px; }
-.tl-line { width: 2px; flex: 1; background: var(--border); margin: 4px 0; }
-.tl-content { padding-bottom: 24px; flex: 1; }
-
-/* ── SLIDE-SPECIFIC ── */
-
-/* Cover */
-#s0 { background: var(--ink); justify-content: center; }
-#s0 .kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .14em; color: rgba(255,255,255,.4); text-transform: uppercase; margin-bottom: 32px; }
-#s0 .title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 72px; line-height: .92; color: white; }
-#s0 .title span { color: #4fa3e0; }
-#s0 .sub { font-size: 18px; color: rgba(255,255,255,.5); margin-top: 24px; max-width: 560px; line-height: 1.5; }
-#s0 .corner { position: absolute; bottom: 60px; right: 72px; text-align: right; }
-#s0 .corner p { font-size: 12px; color: rgba(255,255,255,.3); font-family: 'JetBrains Mono', monospace; }
-#s0 .grid-bg {
-  position: absolute; inset: 0; opacity: .06;
-  background-image: linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
-/* Agenda */
-#s1 .agenda-items { display: flex; flex-direction: column; gap: 2px; margin-top: 32px; }
-#s1 .agenda-item {
-  display: flex; align-items: center; gap: 20px;
-  padding: 18px 24px; border-radius: 8px;
-  background: var(--surface); border: 1px solid transparent;
-  transition: all .2s; cursor: pointer;
-}
-#s1 .agenda-item:hover { background: var(--white); border-color: var(--border); }
-#s1 .agenda-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); width: 24px; }
-#s1 .agenda-title { font-size: 15px; font-weight: 500; flex: 1; }
-#s1 .agenda-tag { }
-
-/* Opportunity */
-#s2 .big-stat { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 88px; line-height: 1; color: var(--blue); }
-
-/* Dashboard slide */
-#s6 { padding: 32px 48px; }
-
-/* Impact */
-.impact-row { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); }
-.impact-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-
-/* Live demo ticker */
-.ticker-wrap { overflow: hidden; background: var(--ink); border-radius: 6px; padding: 8px 16px; }
-.ticker { display: flex; gap: 32px; animation: ticker 20s linear infinite; white-space: nowrap; }
-@keyframes ticker { 0%{ transform: translateX(0)} 100%{ transform: translateX(-50%)} }
-.ticker-item { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,.5); }
-.ticker-item span { color: #4fa3e0; }
-
-/* Ticket demo */
-.ticket-card {
-  border: 1px solid var(--border); border-radius: 8px; padding: 14px;
-  background: var(--white); position: relative;
-}
-.ticket-priority { position: absolute; top: 14px; right: 14px; }
-.ai-badge {
-  display: inline-flex; align-items: center; gap: 4px;
-  background: var(--blue-light); color: var(--blue);
-  font-size: 10px; font-family: 'JetBrains Mono', monospace;
-  padding: 3px 8px; border-radius: 4px;
-}
-.ai-badge::before { content: '◈'; font-size: 10px; }
-
-/* Pulse animation */
-@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
-.live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: inline-block; animation: pulse-dot 1.5s infinite; }
-
-/* Fade in items */
-@keyframes fadeUp { from{ opacity:0; transform: translateY(16px)} to{ opacity:1; transform:translateY(0)} }
-.fade-1 { animation: fadeUp .5s .1s both; }
-.fade-2 { animation: fadeUp .5s .2s both; }
-.fade-3 { animation: fadeUp .5s .35s both; }
-.fade-4 { animation: fadeUp .5s .5s both; }
-.fade-5 { animation: fadeUp .5s .65s both; }
-
-/* Roadmap bars */
-.roadmap-phase { border-left: 3px solid var(--blue); padding-left: 16px; margin-bottom: 20px; }
-.roadmap-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; }
-.roadmap-sub { font-size: 12px; color: var(--muted); margin: 4px 0 10px; }
-.roadmap-items { display: flex; flex-direction: column; gap: 6px; }
-.roadmap-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-.roadmap-item::before { content: '→'; color: var(--blue); font-size: 12px; flex-shrink: 0; }
-
-/* Contract options */
-.contract-card {
-  background: var(--white); border: 1.5px solid var(--border);
-  border-radius: 12px; padding: 24px; position: relative;
-}
-.contract-card.featured { border-color: var(--blue); }
-.contract-card.featured::before {
-  content: 'RECOMMENDED';
-  position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
-  background: var(--blue); color: white; font-size: 9px; font-family: 'JetBrains Mono', monospace;
-  letter-spacing: .1em; padding: 3px 10px; border-radius: 4px;
-}
-
-/* Scrollable in slide */
-.scroll-inner { overflow-y: auto; flex: 1; padding-right: 4px; }
-.scroll-inner::-webkit-scrollbar { width: 3px; }
-.scroll-inner::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 </style>
 </head>
 <body>
-
 <div class="deck" id="deck">
 
-<!-- ══ SLIDE 0: COVER ══ -->
+<!-- ══ 0: COVER ══ -->
 <div class="slide active" id="s0">
   <div class="grid-bg"></div>
-  <div style="position:relative;z-index:1">
-    <div class="kicker">SF-ICT × AI Division — Confidential Proposal — April 2026</div>
-    <div class="title">Introducing<br><span>ZakelijkWerken</span><br>4.0</div>
-    <div class="sub">How SF-ICT becomes the first MSP in Noord-Brabant to offer a complete AI-as-a-Service layer — protecting MRR, reducing ticket volume, and opening a new revenue stream worth €200k+ in year one.</div>
+  <div style="position:relative;z-index:1;max-width:700px">
+    <div class="sfict-logo">
+      <span class="sfict-mark">SF:</span>
+      <div class="sfict-divider"></div>
+      <span class="sfict-label">× Victor Citroen — Confidential — April 2026</span>
+    </div>
+    <div class="accent-line"></div>
+    <div class="display" style="font-size:78px;color:white;margin-bottom:8px">SAGE</div>
+    <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:22px;background:linear-gradient(90deg,#1BA2D2,#E4067D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:28px;letter-spacing:.02em">SF-ICT AI Guidance Engine</div>
+    <div style="font-size:17px;color:rgba(255,255,255,.55);line-height:1.65;max-width:540px">A proprietary AI system built entirely on SF-ICT's 20 years of ticket data — giving your engineers instant diagnosis, resolution guidance, and predictive failure detection across 1,000+ client endpoints.</div>
+    <div style="margin-top:36px;display:flex;gap:16px;flex-wrap:wrap">
+      <div style="background:rgba(27,162,210,.12);border:1px solid rgba(27,162,210,.3);border-radius:8px;padding:12px 20px;text-align:center">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:white">6</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:2px">AI layers</div>
+      </div>
+      <div style="background:rgba(27,162,210,.12);border:1px solid rgba(27,162,210,.3);border-radius:8px;padding:12px 20px;text-align:center">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:#1BA2D2">20yr</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:2px">training data</div>
+      </div>
+      <div style="background:rgba(27,162,210,.12);border:1px solid rgba(27,162,210,.3);border-radius:8px;padding:12px 20px;text-align:center">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:#4ade80">1,000+</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:2px">endpoints monitored</div>
+      </div>
+      <div style="background:rgba(228,6,125,.12);border:1px solid rgba(228,6,125,.25);border-radius:8px;padding:12px 20px;text-align:center">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:#E4067D">90d</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:2px">to first results</div>
+      </div>
+    </div>
   </div>
-  <div class="corner">
-    <p>Presented by Victor Citroen</p>
-    <p style="margin-top:4px">Polypus Intelligence</p>
+  <div style="position:absolute;bottom:60px;right:68px;text-align:right">
+    <div style="font-size:12px;color:rgba(255,255,255,.3);font-family:'JetBrains Mono',monospace">Victor Citroen</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.2);font-family:'JetBrains Mono',monospace;margin-top:3px">victor@polypusintelligence.ch</div>
   </div>
 </div>
 
-<!-- ══ SLIDE 1: AGENDA ══ -->
+<!-- ══ 1: THE CORE IDEA ══ -->
 <div class="slide" id="s1">
-  <div class="tag tag-ink fade-1" style="width:fit-content">Today's agenda</div>
-  <h1 class="heading fade-2" style="font-size:42px;margin-top:16px">What we cover<br>in the next 30 minutes</h1>
-  <div class="agenda-items fade-3">
-    <div class="agenda-item" onclick="goTo(2)">
-      <span class="agenda-num">01</span>
-      <span class="agenda-title">The opportunity — why AI, why now, why SF-ICT</span>
-      <span class="tag tag-blue">5 min</span>
+  <div class="tag t-ink f1" style="width:fit-content">The core idea</div>
+  <h1 class="heading f2" style="font-size:42px;margin:14px 0 10px">This is not a tool you buy.<br>It is a system I build <span style="color:#0477AE">for SF-ICT only.</span></h1>
+  <p style="font-size:15px;color:var(--ink2);max-width:600px;line-height:1.65;margin-bottom:28px" class="f3">Every MSP can subscribe to off-the-shelf AI. SAGE is different — it is trained exclusively on SF-ICT's 20 years of ticket history, resolution notes, client environments, and failure patterns. No competitor can replicate it because no competitor has your data.</p>
+
+  <div class="g3 f4" style="flex:1">
+    <div style="grid-column:span 2">
+      <div class="card" style="height:100%;border-left:4px solid var(--blue)">
+        <div style="font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:12px">THE COMPETITIVE MOAT</div>
+        <div class="g2" style="gap:20px;height:calc(100% - 32px);align-items:center">
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:48px;color:#0477AE;line-height:1">500k+</div>
+            <div style="font-size:13px;color:var(--ink2);margin-top:6px;line-height:1.5">Historical tickets containing real Dutch SMB failure patterns, resolution steps, engineer knowledge — in Dutch, in context, for your client types.</div>
+            <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px"><span style="color:#0477AE">→</span> Every resolved ticket teaches the model a new pattern</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px"><span style="color:#0477AE">→</span> Every engineer note — even vague ones — becomes structured knowledge</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px"><span style="color:#0477AE">→</span> The model gets smarter every single day SF-ICT operates</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div class="csm" style="text-align:center">
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--green)">Yours only</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:3px">No competitor gets this model</div>
+            </div>
+            <div class="csm" style="text-align:center">
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:#0477AE">Dutch SMB</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:3px">Trained for your actual clients</div>
+            </div>
+            <div class="csm" style="text-align:center">
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--amber)">On-premise</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:3px">Data never leaves SF-ICT. GDPR safe.</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="agenda-item" onclick="goTo(3)">
-      <span class="agenda-num">02</span>
-      <span class="agenda-title">Pillar 1 — Internal AI: reducing tickets & cost</span>
-      <span class="tag tag-green">8 min</span>
-    </div>
-    <div class="agenda-item" onclick="goTo(4)">
-      <span class="agenda-num">03</span>
-      <span class="agenda-title">Pillar 2 — External AI: new MRR & client services</span>
-      <span class="tag tag-green">8 min</span>
-    </div>
-    <div class="agenda-item" onclick="goTo(5)">
-      <span class="agenda-num">04</span>
-      <span class="agenda-title">The 20-year ticket data — what it unlocks</span>
-      <span class="tag tag-amber">5 min</span>
-    </div>
-    <div class="agenda-item" onclick="goTo(6)">
-      <span class="agenda-num">05</span>
-      <span class="agenda-title">Live demo — AI ticket triage dashboard</span>
-      <span class="tag tag-blue">3 min</span>
-    </div>
-    <div class="agenda-item" onclick="goTo(7)">
-      <span class="agenda-num">06</span>
-      <span class="agenda-title">90-day plan + contract options</span>
-      <span class="tag tag-ink">4 min</span>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="card" style="flex:1">
+        <div style="font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:8px">WITHOUT SAGE</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div style="font-size:13px;color:var(--ink2);padding-left:10px;border-left:2px solid var(--border)">Engineer reads ticket → searches memory → tries solution → escalates if wrong</div>
+          <div style="font-size:12px;color:var(--muted)">Average: 47 minutes per P2 ticket</div>
+          <div style="font-size:12px;color:var(--muted)">Vague resolution notes lose knowledge forever</div>
+          <div style="font-size:12px;color:var(--muted)">Failure detected only after client calls</div>
+        </div>
+      </div>
+      <div class="card" style="flex:1;border-color:#0477AE">
+        <div style="font-size:11px;color:#0477AE;font-family:'JetBrains Mono',monospace;margin-bottom:8px">WITH SAGE</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div style="font-size:13px;color:var(--ink2);padding-left:10px;border-left:2px solid var(--blue)">Ticket arrives → SAGE diagnoses in 3 seconds → resolution steps displayed → engineer confirms</div>
+          <div style="font-size:12px;color:var(--green);font-weight:500">Average: 11 minutes per P2 ticket</div>
+          <div style="font-size:12px;color:var(--green);font-weight:500">Every note decoded and stored as structured knowledge</div>
+          <div style="font-size:12px;color:var(--green);font-weight:500">Failure predicted 48–72h before it happens</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ══ SLIDE 2: OPPORTUNITY ══ -->
+<!-- ══ 2: ARCHITECTURE ══ -->
 <div class="slide" id="s2">
-  <div style="display:flex;gap:48px;height:100%">
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
-      <div class="tag tag-amber fade-1" style="width:fit-content">The market reality</div>
-      <h1 class="heading fade-2" style="font-size:48px;margin-top:16px;margin-bottom:32px">Your clients are<br>already using AI.<br>They need <span style="color:var(--blue)">your guidance.</span></h1>
-      <div style="display:flex;flex-direction:column;gap:16px" class="fade-3">
-        <div class="impact-row">
-          <div class="impact-icon" style="background:var(--amber-light)">⚠</div>
-          <div><strong>73% of SMBs</strong> are using free ChatGPT for work — uploading sensitive client data to public servers. GDPR violation risk.</div>
+  <div class="tag t-blue f1" style="width:fit-content">System architecture</div>
+  <h1 class="heading f2" style="font-size:36px;margin:12px 0 6px">SAGE — 6 layers.<br>One connected intelligence.</h1>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:20px" class="f3">Each layer feeds the next. The system improves automatically as SF-ICT operates.</p>
+
+  <div style="flex:1;display:flex;flex-direction:column;gap:8px" class="f4">
+
+    <div style="display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:center;padding:10px 14px;background:var(--white);border:1px solid var(--border);border-radius:8px;border-left:4px solid #0477AE">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#0477AE;font-weight:500">LAYER 1</div>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px">Ticket Intelligence Engine</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">New ticket arrives → SAGE reads it → classifies priority + category → surfaces top 5 similar historical tickets → generates resolution steps with confidence score → displays to engineer before they start</div>
         </div>
-        <div class="impact-row">
-          <div class="impact-icon" style="background:var(--blue-light)">📋</div>
-          <div><strong>M365 Copilot</strong> is being purchased without proper SharePoint permissions — any employee can query confidential HR data.</div>
-        </div>
-        <div class="impact-row">
-          <div class="impact-icon" style="background:var(--green-light)">💶</div>
-          <div>Dutch SMBs spent <strong>€340M on AI tools</strong> in 2025. Only 12% were guided by their MSP. That 88% gap is SF-ICT's opportunity.</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
+          <span class="tag t-blue" style="font-size:9px">NLP</span>
+          <span class="tag t-green" style="font-size:9px">PSA API</span>
         </div>
       </div>
     </div>
-    <div style="width:320px;display:flex;flex-direction:column;gap:12px;justify-content:center" class="fade-4">
-      <div class="card" style="text-align:center;border-color:var(--blue)">
-        <div class="big-stat">88%</div>
-        <div style="font-size:13px;color:var(--muted);margin-top:8px">of AI spending by Dutch SMBs happens WITHOUT MSP involvement</div>
-      </div>
-      <div class="card-sm" style="text-align:center">
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--green)">€200k+</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px">estimated new MRR potential for SF-ICT in year one</div>
-      </div>
-      <div class="card-sm" style="text-align:center;background:var(--ink)">
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:white">First mover</div>
-        <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:4px">No competing MSP in Noord-Brabant has an AI department yet</div>
+
+    <div style="display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:center;padding:10px 14px;background:var(--white);border:1px solid var(--border);border-radius:8px;border-left:4px solid #15803d">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);font-weight:500">LAYER 2</div>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px">Vague Resolution Decoder</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">Engineer closes ticket with "restarted PC, works now" → LLM decodes the actual technical action → extracts root cause → stores structured knowledge → identifies if a proper fix exists vs a temporary workaround → suggests the real resolution for next time</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
+          <span class="tag t-green" style="font-size:9px">LLM</span>
+          <span class="tag t-amber" style="font-size:9px">Knowledge base</span>
+        </div>
       </div>
     </div>
+
+    <div style="display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:center;padding:10px 14px;background:var(--white);border:1px solid var(--border);border-radius:8px;border-left:4px solid #b45309">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--amber);font-weight:500">LAYER 3</div>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px">Fleet Health Monitor</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">Live dashboard of all 1,000+ client endpoints via RMM API — CPU, RAM, disk SMART, uptime, patch status, last user activity. Single view of entire client fleet. Colour-coded health scores. Drill-down to any device in 2 clicks.</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
+          <span class="tag t-amber" style="font-size:9px">RMM API</span>
+          <span class="tag t-blue" style="font-size:9px">Real-time</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:center;padding:10px 14px;background:var(--white);border:1px solid var(--border);border-radius:8px;border-left:4px solid #b52a1c">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--red);font-weight:500">LAYER 4</div>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px">Predictive Failure Engine</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">ML model trained on 20 years of failure sequences — learns that telemetry pattern X always precedes failure type Y by 48–72 hours. Triggers automated RMM action before the client experiences downtime. Engineers fix what hasn't broken yet.</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
+          <span class="tag t-red" style="font-size:9px">ML model</span>
+          <span class="tag t-green" style="font-size:9px">Auto-remediate</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:center;padding:10px 14px;background:var(--white);border:1px solid var(--border);border-radius:8px;border-left:4px solid var(--purple)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#766A86;font-weight:500">LAYER 5</div>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px">Update Impact Intelligence</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">Every day at 06:00 — SAGE reads Windows Update catalog, Microsoft 365 change log, and vendor security advisories. Cross-references against the client fleet. Generates a prioritised action list: "3 clients running KB5034441 — this conflicts with Fortinet firmware 7.2.x — patch sequence required before Thursday."</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
+          <span class="tag" style="background:#f3e8ff;color:#766A86;font-size:9px">Daily scan</span>
+          <span class="tag t-amber" style="font-size:9px">Action list</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:center;padding:10px 14px;background:var(--ink);border-radius:8px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.5);font-weight:500">LAYER 6</div>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:white">Client Needs Predictor</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:2px">Analyses ticket patterns per client to predict upcoming requests before they submit them. "Accountantskantoor Peters always has 4 onboarding requests in January — prepare M365 licenses and Intune profiles now." True proactive MSP — clients feel cared for before they ask.</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
+          <span class="tag t-ink" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);font-size:9px">Behavioural AI</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
-<!-- ══ SLIDE 3: PILLAR 1 — INTERNAL ══ -->
+<!-- ══ 3: LAYER 1 + 2 DEMO ══ -->
 <div class="slide" id="s3">
-  <div class="tag tag-green fade-1" style="width:fit-content">Pillar 1 — Internal AI</div>
-  <h1 class="heading fade-2" style="font-size:38px;margin-top:12px;margin-bottom:24px">Reducing tickets.<br>Protecting margins.</h1>
-  <div class="g3 fade-3" style="flex:1">
+  <div class="tag t-blue f1" style="width:fit-content">Layers 1 & 2 — Live demo</div>
+  <h1 class="heading f2" style="font-size:34px;margin:12px 0 20px">Ticket Intelligence &<br>Vague Resolution Decoder</h1>
 
-    <div class="card" style="border-top:3px solid var(--blue)">
-      <div class="ai-badge" style="margin-bottom:12px">AI TRIAGE</div>
-      <div class="heading" style="font-size:18px;margin-bottom:8px">Intelligent ticket routing</div>
-      <div style="font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:16px">AI reads every incoming email to support@sf-ict.nl, classifies it (P1–P4), detects category (password reset, network, printer, M365), and routes to correct queue — before a human touches it.</div>
-      <div style="border-top:1px solid var(--border);padding-top:12px">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">IMPACT</div>
-        <div style="font-size:13px;font-weight:600;color:var(--green)">↑ FCR rate by 30%</div>
-        <div style="font-size:13px;font-weight:600;color:var(--blue)">↓ 1st-line admin load by 40%</div>
+  <div class="g2 f3" style="flex:1;gap:20px">
+    <!-- Left: ticket flow -->
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted)">INCOMING TICKET — SAGE PROCESSING</div>
+
+      <div class="tkt" style="border-left:3px solid var(--amber)">
+        <div class="tkt-client">Bakkerij De Wit · Received 09:14</div>
+        <div class="tkt-issue">"Teams werkt niet meer, kan geen vergadering starten"</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Original priority: unclassified · No category</div>
+        <div style="background:#d6f0f9;border-radius:6px;padding:10px;margin-bottom:8px">
+          <div style="font-size:10px;color:#0477AE;font-family:'JetBrains Mono',monospace;margin-bottom:6px">SAGE ANALYSIS — 3.1 seconds</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+            <span class="ai-chip">P3 · M365 / Teams</span>
+            <span class="ai-chip">847 similar tickets</span>
+            <span class="ai-chip">94% confidence</span>
+          </div>
+          <div style="font-size:12px;color:var(--ink2);line-height:1.5;margin-bottom:8px"><strong>Root cause (most likely):</strong> Teams audio/video device driver conflict after Windows Update KB5034763. Affects 34 endpoints in client base this month.</div>
+          <div style="font-size:12px;color:var(--green);font-weight:500">Resolution: Push Teams cache clear + device driver rollback via RMM. Est. 6 min. Auto-assign to 1st line.</div>
+        </div>
+        <div class="ai-row">
+          <span class="tag t-green" style="font-size:9px">FCR CANDIDATE</span>
+          <span class="tag t-blue" style="font-size:9px">RMM script ready</span>
+          <span class="tag t-amber" style="font-size:9px">Update conflict flagged</span>
+        </div>
+      </div>
+
+      <div class="tkt" style="border-left:3px solid var(--red)">
+        <div class="tkt-client">Tandartspraktijk Vos · Received 09:31</div>
+        <div class="tkt-issue">"Server reageert langzaam, patiëntensysteem traag"</div>
+        <div style="background:var(--red-lt);border-radius:6px;padding:10px">
+          <div style="font-size:10px;color:var(--red);font-family:'JetBrains Mono',monospace;margin-bottom:6px">SAGE ANALYSIS — 2.8 seconds · CRITICAL MATCH</div>
+          <div style="font-size:12px;color:var(--ink2);line-height:1.5;margin-bottom:6px"><strong>Pattern match:</strong> This sequence (slow EHR + high disk latency + memory at 91%) preceded complete server failure in 3 of the last 4 occurrences in database.</div>
+          <div style="font-size:12px;color:var(--red);font-weight:500">Escalate P1 immediately. Pre-schedule emergency maintenance. Backup verification required now.</div>
+        </div>
       </div>
     </div>
 
-    <div class="card" style="border-top:3px solid var(--amber)">
-      <div class="ai-badge" style="margin-bottom:12px">AUTO-DOC</div>
-      <div class="heading" style="font-size:18px;margin-bottom:8px">Automated documentation</div>
-      <div style="font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:16px">When a ticket closes, AI reads the resolution notes and auto-generates a standardised IT Glue knowledge base article. "If it's not in IT Glue, it doesn't exist" — now enforced automatically.</div>
-      <div style="border-top:1px solid var(--border);padding-top:12px">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">IMPACT</div>
-        <div style="font-size:13px;font-weight:600;color:var(--green)">↓ Repeat escalations</div>
-        <div style="font-size:13px;font-weight:600;color:var(--blue)">Knowledge base always current</div>
-      </div>
-    </div>
+    <!-- Right: vague decoder -->
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted)">VAGUE RESOLUTION DECODER — LAYER 2</div>
 
-    <div class="card" style="border-top:3px solid var(--green)">
-      <div class="ai-badge" style="margin-bottom:12px">ENG COPILOT</div>
-      <div class="heading" style="font-size:18px;margin-bottom:8px">Engineer AI assistant</div>
-      <div style="font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:16px">2nd-line engineers prompt AI to write PowerShell scripts for the RMM — deploying mass fixes across hundreds of endpoints in minutes. Complex Intune/Entra troubleshooting guided by AI trained on your ticket history.</div>
-      <div style="border-top:1px solid var(--border);padding-top:12px">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">IMPACT</div>
-        <div style="font-size:13px;font-weight:600;color:var(--green)">↓ Resolution time 50%</div>
-        <div style="font-size:13px;font-weight:600;color:var(--blue)">↑ Tickets per engineer/day</div>
+      <div class="card">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Engineer closes ticket with this resolution note:</div>
+        <div class="vague-box" style="margin-bottom:12px">
+          <div style="font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px">ORIGINAL RESOLUTION NOTE</div>
+          <div style="font-size:13px;font-style:italic;color:var(--ink2)">"opnieuw opgestart, werkte daarna weer"</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">("restarted, worked again after")</div>
+        </div>
+        <div style="text-align:center;font-size:18px;color:var(--muted);margin:4px 0">↓ SAGE decodes</div>
+        <div class="decoded-box">
+          <div style="font-size:11px;color:#0477AE;font-family:'JetBrains Mono',monospace;margin-bottom:8px">STRUCTURED KNOWLEDGE EXTRACTED</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+            <div><strong>Root cause:</strong> Windows Update service hung post-reboot (svchost memory leak — known KB5031455 issue)</div>
+            <div><strong>Actual fix:</strong> Restart cleared the service hang — temporary resolution only</div>
+            <div><strong>Permanent fix:</strong> Deploy hotfix via RMM — 3 other clients have same config</div>
+            <div><strong>Prevention:</strong> Add SAGE monitoring rule for svchost memory threshold</div>
+            <div style="color:var(--amber)"><strong>Warning:</strong> This will recur within 14 days without permanent fix</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted)">Knowledge base article auto-drafted. 3 at-risk endpoints flagged. RMM script queued.</div>
       </div>
-    </div>
 
-    <div class="card" style="border-top:3px solid #9b59b6">
-      <div class="ai-badge" style="margin-bottom:12px">AI RECRUIT</div>
-      <div class="heading" style="font-size:18px;margin-bottom:8px">AI recruitment pipeline</div>
-      <div style="font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:16px">As SF-ICT scales the AI department, the recruitment system automatically screens CVs against technical requirements, generates interview questions, and scores candidates — reducing HR time by 70%.</div>
-      <div style="border-top:1px solid var(--border);padding-top:12px">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">IMPACT</div>
-        <div style="font-size:13px;font-weight:600;color:var(--green)">↓ Time-to-hire by 60%</div>
-        <div style="font-size:13px;font-weight:600;color:var(--blue)">Better candidate quality</div>
-      </div>
-    </div>
-
-    <div class="card" style="border-top:3px solid var(--blue);grid-column:span 2">
-      <div class="ai-badge" style="margin-bottom:12px">PREDICTIVE</div>
-      <div class="heading" style="font-size:18px;margin-bottom:8px">Predictive failure detection — trained on 20 years of SF-ICT ticket data</div>
-      <div style="font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:12px">The ML model learns failure patterns from your historical ticket database. When endpoint telemetry matches a pre-failure signature, it triggers an automated RMM task before the client experiences downtime. True proactive MSP.</div>
-      <div style="display:flex;gap:16px">
-        <div class="card-sm" style="flex:1;text-align:center;background:var(--green-light)"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--green)">72h</div><div style="font-size:11px;color:var(--muted)">avg warning before failure</div></div>
-        <div class="card-sm" style="flex:1;text-align:center;background:var(--blue-light)"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--blue)">↓65%</div><div style="font-size:11px;color:var(--muted)">P1 incidents after deployment</div></div>
-        <div class="card-sm" style="flex:1;text-align:center;background:var(--amber-light)"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--amber)">MRR</div><div style="font-size:11px;color:var(--muted)">protected by preventing SLA breaches</div></div>
+      <div class="card" style="background:#dbeaf6">
+        <div style="font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:8px">WHY THIS MATTERS</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--ink2)">
+          <div>→ SF-ICT has 500,000+ vague resolution notes in the PSA</div>
+          <div>→ Each one is trapped knowledge that no engineer can find</div>
+          <div>→ SAGE converts all of them into searchable, structured intelligence</div>
+          <div style="color:#0477AE;font-weight:500">→ Your 20 years of experience becomes instantly queryable</div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══ SLIDE 4: PILLAR 2 — EXTERNAL ══ -->
+<!-- ══ 4: UPDATE INTELLIGENCE ══ -->
 <div class="slide" id="s4">
-  <div class="tag tag-blue fade-1" style="width:fit-content">Pillar 2 — External AI services</div>
-  <h1 class="heading fade-2" style="font-size:36px;margin-top:12px;margin-bottom:20px">New revenue.<br>New services. <span style="color:var(--blue)">ZakelijkWerken 4.0.</span></h1>
+  <div class="tag t-amber f1" style="width:fit-content">Layer 5 — Update Impact Intelligence</div>
+  <h1 class="heading f2" style="font-size:36px;margin:12px 0 8px">Every morning at 06:00<br>SAGE reads the internet<br><span style="color:#0477AE">so your engineers don't have to.</span></h1>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:20px" class="f3">Cross-references every new Windows update, M365 change, and vendor advisory against your actual client fleet. Generates a daily action list.</p>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1" class="fade-3">
-
-    <div class="card" style="background:var(--ink);color:white">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-        <div class="tag" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.8)">HIGH VALUE</div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:#4fa3e0">€2,500–€8,000</div>
-      </div>
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:8px">M365 Copilot Readiness Audit</div>
-      <div style="font-size:12px;color:rgba(255,255,255,.6);line-height:1.6">Before selling a single Copilot license, SF-ICT runs a full SharePoint permissions audit. Without this, employees can ask Copilot "what is my colleague's salary?" and get the answer. The audit is mandatory. It is billable. Every client in the portfolio needs it.</div>
-      <div style="margin-top:12px;font-size:11px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,.3)">IMMEDIATE OPPORTUNITY — 30 CLIENTS = €75,000+</div>
-    </div>
-
-    <div class="card" style="border-color:var(--blue)">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-        <div class="tag tag-blue">RECURRING MRR</div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--blue)">€35–€55/user/mo</div>
-      </div>
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:8px">Secure Private AI — Azure OpenAI</div>
-      <div style="font-size:12px;color:var(--ink2);line-height:1.6">Clients are using public ChatGPT with company data — GDPR violation. SF-ICT deploys a private, client-isolated AI instance using Azure OpenAI. Data stays in the Microsoft tenant. Sold as a monthly add-on to ZakelijkWerken. Fully recurring.</div>
-      <div style="margin-top:12px;font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted)">10 CLIENTS × 20 USERS = €7,000–€11,000 MRR</div>
-    </div>
-
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-        <div class="tag tag-green">PROJECT BASED</div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--green)">€5,000–€15,000</div>
-      </div>
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:8px">Business Process Automation</div>
-      <div style="font-size:12px;color:var(--ink2);line-height:1.6">Power Automate + AI Builder: invoice processing, HR onboarding, approval flows. SMBs currently do this manually. SF-ICT sells the automation as a project. Position it as: "We stop selling IT support, we start selling business efficiency."</div>
-    </div>
-
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-        <div class="tag tag-amber">NEW SEGMENT</div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--amber)">vCIO-level</div>
-      </div>
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:8px">AI Strategy Consulting for SMBs</div>
-      <div style="font-size:12px;color:var(--ink2);line-height:1.6">Victor acts as fractional AI advisor for SF-ICT's key accounts — 3-year AI roadmap, technology selection, ROI projections, board presentations. This elevates SF-ICT from IT provider to strategic partner. Dramatically reduces churn.</div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ══ SLIDE 5: TICKET DATA ══ -->
-<div class="slide" id="s5">
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;height:100%;align-items:center">
-    <div>
-      <div class="tag tag-amber fade-1" style="width:fit-content">The unfair advantage</div>
-      <h1 class="heading fade-2" style="font-size:44px;margin:16px 0 24px">20 years of<br>ticket data.<br><span style="color:var(--blue)">Your secret weapon.</span></h1>
-      <div style="font-size:15px;color:var(--ink2);line-height:1.7;margin-bottom:24px" class="fade-3">
-        Every MSP can buy AI tools. <strong>No other MSP has what SF-ICT has</strong> — two decades of real-world Dutch SMB IT failure data. This is the training corpus that makes your AI better than any off-the-shelf solution.
-      </div>
-      <div style="display:flex;flex-direction:column;gap:12px" class="fade-4">
-        <div class="impact-row">
-          <div class="impact-icon" style="background:var(--blue-light)">🗄</div>
-          <div><strong>Custom LLM fine-tuning</strong> on SF-ICT's resolution history — your AI knows how your engineers fix things, not how a generic model does.</div>
-        </div>
-        <div class="impact-row">
-          <div class="impact-icon" style="background:var(--green-light)">🔮</div>
-          <div><strong>Predictive models</strong> trained on real failure sequences — the model knows that "symptom A + symptom B = disk failure in 72h" because it has seen it 1,400 times.</div>
-        </div>
-        <div class="impact-row">
-          <div class="impact-icon" style="background:var(--amber-light)">⚡</div>
-          <div><strong>Automated resolution suggestions</strong> — when a new ticket arrives, AI finds the 5 most similar historical tickets and surfaces the exact resolution steps.</div>
-        </div>
-      </div>
-    </div>
-    <div class="fade-5">
-      <div class="card" style="margin-bottom:12px">
-        <div style="font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:16px">ESTIMATED DATA ASSET</div>
-        <div class="g2" style="gap:16px">
-          <div><div class="metric-num">500k+</div><div class="metric-label">Historical tickets</div></div>
-          <div><div class="metric-num" style="color:var(--green)">20</div><div class="metric-label">Years of patterns</div></div>
-          <div><div class="metric-num" style="color:var(--amber)">98%</div><div class="metric-label">Dutch SMB relevance</div></div>
-          <div><div class="metric-num" style="color:#9b59b6">∞</div><div class="metric-label">Competitive moat</div></div>
-        </div>
-      </div>
-      <div class="card" style="background:var(--ink)">
-        <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,.4);margin-bottom:12px">TICKET INTELLIGENCE — LIVE EXAMPLE</div>
+  <div class="g2 f4" style="flex:1;gap:20px">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted)">DATA SOURCES SAGE READS DAILY</div>
+      <div class="card">
         <div style="display:flex;flex-direction:column;gap:8px">
-          <div style="background:rgba(255,255,255,.05);border-radius:6px;padding:10px">
-            <div style="font-size:11px;color:rgba(255,255,255,.4);margin-bottom:4px">INCOMING TICKET</div>
-            <div style="font-size:13px;color:white">"Outlook keeps crashing after Windows update"</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px;background:#dbeaf6;border-radius:6px">
+            <div style="font-size:13px;font-weight:500">Microsoft Update Catalog</div>
+            <div style="display:flex;align-items:center;gap:6px"><div class="live"></div><span style="font-size:11px;color:var(--muted)">daily at 06:00</span></div>
           </div>
-          <div style="display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.3);font-size:11px">↓ AI matches to 847 similar tickets</div>
-          <div style="background:rgba(79,163,224,.1);border:1px solid rgba(79,163,224,.3);border-radius:6px;padding:10px">
-            <div style="font-size:11px;color:#4fa3e0;margin-bottom:6px">AI RESOLUTION — 94% match confidence</div>
-            <div style="font-size:12px;color:rgba(255,255,255,.8);line-height:1.5">Run: <span style="font-family:'JetBrains Mono',monospace;color:#4fa3e0">MSIEXEC /repair</span> for Office suite. If persists, clear OST cache at %appdata%\Microsoft\Outlook. Resolution time: avg 8 min.</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px;background:#dbeaf6;border-radius:6px">
+            <div style="font-size:13px;font-weight:500">Microsoft 365 Message Centre</div>
+            <div style="display:flex;align-items:center;gap:6px"><div class="live"></div><span style="font-size:11px;color:var(--muted)">daily at 06:00</span></div>
           </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px;background:#dbeaf6;border-radius:6px">
+            <div style="font-size:13px;font-weight:500">Fortinet / Meraki / Ubiquiti advisories</div>
+            <div style="display:flex;align-items:center;gap:6px"><div class="live"></div><span style="font-size:11px;color:var(--muted)">daily at 06:00</span></div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px;background:#dbeaf6;border-radius:6px">
+            <div style="font-size:13px;font-weight:500">NCSC-NL security bulletins</div>
+            <div style="display:flex;align-items:center;gap:6px"><div class="live"></div><span style="font-size:11px;color:var(--muted)">real-time</span></div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px;background:#dbeaf6;border-radius:6px">
+            <div style="font-size:13px;font-weight:500">CVE database — critical vulnerabilities</div>
+            <div style="display:flex;align-items:center;gap:6px"><div class="live"></div><span style="font-size:11px;color:var(--muted)">real-time</span></div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px;background:#dbeaf6;border-radius:6px">
+            <div style="font-size:13px;font-weight:500">Vendor application changelogs</div>
+            <div style="display:flex;align-items:center;gap:6px"><div class="live"></div><span style="font-size:11px;color:var(--muted)">daily</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted)">TODAY'S SAGE MORNING REPORT — 06:02</div>
+      <div class="card" style="border-left:3px solid var(--red);flex:1;overflow-y:auto">
+        <div style="display:flex;flex-direction:column;gap:14px">
+
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+              <span class="tag t-red" style="font-size:9px">CRITICAL — ACT TODAY</span>
+            </div>
+            <div style="font-size:13px;font-weight:500;margin-bottom:4px">KB5034763 — Breaks Teams audio on Windows 11 22H2</div>
+            <div style="font-size:12px;color:var(--ink2);margin-bottom:6px">Affects 23 endpoints across 7 clients. Already causing tickets (see Bakkerij De Wit #4471). Deploy block policy via Intune before more clients are affected.</div>
+            <div style="font-size:11px;color:var(--red)">Action: Block update + deploy driver rollback script via RMM. ETA: 12 min total.</div>
+          </div>
+
+          <div style="border-top:1px solid var(--border);padding-top:14px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+              <span class="tag t-amber" style="font-size:9px">WARNING — ACT THIS WEEK</span>
+            </div>
+            <div style="font-size:13px;font-weight:500;margin-bottom:4px">FortiOS 7.4.3 — Incompatible with current VPN config on 4 client sites</div>
+            <div style="font-size:12px;color:var(--ink2);margin-bottom:6px">Clients: Loodgietersbedrijf Smit, Fysiotherapie Noord, Restaurant Bregje, Kapsalon Stijl. Apply config migration before auto-update on Friday.</div>
+            <div style="font-size:11px;color:var(--amber)">Action: Schedule maintenance window. Config script ready.</div>
+          </div>
+
+          <div style="border-top:1px solid var(--border);padding-top:14px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+              <span class="tag t-blue" style="font-size:9px">INFO — PLAN NEXT WEEK</span>
+            </div>
+            <div style="font-size:13px;font-weight:500;margin-bottom:4px">M365 Copilot update changes SharePoint search behaviour</div>
+            <div style="font-size:12px;color:var(--ink2);">3 clients with Copilot enabled. Permissions audit recommended. 2 clients showing overpermissioned SharePoint libraries.</div>
+          </div>
+
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══ SLIDE 6: LIVE DEMO DASHBOARD ══ -->
+<!-- ══ 5: FLEET MONITOR DEMO ══ -->
+<div class="slide" id="s5">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+    <div>
+      <div class="tag t-ink f1" style="margin-bottom:6px">Layer 3 & 4 — Live demo</div>
+      <h2 class="heading f2" style="font-size:28px">Fleet Health Monitor + Predictive Engine</h2>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px" class="f2">
+      <div class="live"></div>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)">1,000+ ENDPOINTS · REAL-TIME</span>
+    </div>
+  </div>
+
+  <div class="ticker-wrap f3" style="margin-bottom:14px">
+    <div class="ticker-inner" id="fleet-ticker">
+      <span class="ti">EP-0847 Bakkerij De Wit · <span>DISK 94% degraded → backup triggered → replacement ordered</span></span>
+      <span class="ti">EP-1203 Tandartspraktijk Vos · <span>RAM 91% avg · pre-crash pattern · maintenance scheduled</span></span>
+      <span class="ti">EP-0234 Accountantskantoor Peters · <span>3 unused M365 licences → cost saving flagged</span></span>
+      <span class="ti">EP-0891 Kapsalon Stijl · <span>Windows Defender disabled · security risk · auto-re-enable pushed</span></span>
+      <span class="ti">EP-0456 Fysiotherapie Noord · <span>Pending reboot 14 days · update compliance risk</span></span>
+      <span class="ti">EP-0847 Bakkerij De Wit · <span>DISK 94% degraded → backup triggered → replacement ordered</span></span>
+      <span class="ti">EP-1203 Tandartspraktijk Vos · <span>RAM 91% avg · pre-crash pattern · maintenance scheduled</span></span>
+    </div>
+  </div>
+
+  <div class="g4 f4" style="margin-bottom:14px">
+    <div class="csm" style="text-align:center"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:var(--green)" id="fl-healthy">—</div><div style="font-size:11px;color:var(--muted)">Healthy endpoints</div></div>
+    <div class="csm" style="text-align:center"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:var(--amber)" id="fl-warn">—</div><div style="font-size:11px;color:var(--muted)">Warnings</div></div>
+    <div class="csm" style="text-align:center"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:var(--red)" id="fl-crit">—</div><div style="font-size:11px;color:var(--muted)">Critical — action required</div></div>
+    <div class="csm" style="text-align:center"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:#0477AE" id="fl-pred">—</div><div style="font-size:11px;color:var(--muted)">Failures predicted this week</div></div>
+  </div>
+
+  <div class="g2 f5" style="flex:1">
+    <div style="display:flex;flex-direction:column;gap:8px;overflow-y:auto">
+      <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted);margin-bottom:2px">PREDICTIVE ALERTS — ML MODEL</div>
+      <div id="pred-list"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted)">FLEET HEALTH BY CLIENT</div>
+      <div id="fleet-clients" style="display:flex;flex-direction:column;gap:8px;overflow-y:auto;flex:1"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 6: BUILD PLAN ══ -->
 <div class="slide" id="s6">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+  <div class="tag t-ink f1" style="width:fit-content">How I build it</div>
+  <h1 class="heading f2" style="font-size:38px;margin:12px 0 8px">12 months.<br>6 layers. <span style="color:#0477AE">One system.</span></h1>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:20px" class="f3">Built iteratively — every sprint delivers working software, not presentations.</p>
+
+  <div class="g2 f4" style="flex:1;gap:24px">
     <div>
-      <div class="tag tag-ink" style="margin-bottom:6px">Live demo</div>
-      <h2 class="heading" style="font-size:24px">SF-ICT AI Operations Dashboard</h2>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <div class="live-dot"></div>
-      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)">SIMULATED LIVE DATA</span>
-    </div>
-  </div>
-
-  <!-- Ticker -->
-  <div class="ticker-wrap" style="margin-bottom:14px">
-    <div class="ticker" id="ticker">
-      <span class="ticker-item">NEW TICKET — <span>P2 · Network outage · Bakkerij de Wit</span></span>
-      <span class="ticker-item">AI RESOLVED — <span>Password reset · Loodgietersbedrijf Smit · 0 min human time</span></span>
-      <span class="ticker-item">PREDICTION — <span>Disk health warning · Tandartspraktijk Vos · action in 48h</span></span>
-      <span class="ticker-item">COPILOT AUDIT — <span>Accountantskantoor Peters · 127 permission issues found</span></span>
-      <span class="ticker-item">NEW TICKET — <span>P3 · Printer offline · Fysiotherapie Noord</span></span>
-      <span class="ticker-item">AI RESOLVED — <span>Outlook crash loop · SteuerBerater GmbH · RMM script deployed</span></span>
-      <span class="ticker-item">NEW TICKET — <span>P2 · Network outage · Bakkerij de Wit</span></span>
-      <span class="ticker-item">AI RESOLVED — <span>Password reset · Loodgietersbedrijf Smit · 0 min human time</span></span>
-      <span class="ticker-item">PREDICTION — <span>Disk health warning · Tandartspraktijk Vos · action in 48h</span></span>
-      <span class="ticker-item">COPILOT AUDIT — <span>Accountantskantoor Peters · 127 permission issues found</span></span>
-    </div>
-  </div>
-
-  <!-- Metrics row -->
-  <div class="g4" style="margin-bottom:14px">
-    <div class="card-sm" style="text-align:center">
-      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--blue)" id="demo-tickets">0</div>
-      <div style="font-size:11px;color:var(--muted)">Tickets today</div>
-      <div style="font-size:11px;color:var(--green);margin-top:2px" id="demo-auto">0% auto-resolved</div>
-    </div>
-    <div class="card-sm" style="text-align:center">
-      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--green)" id="demo-fcr">0%</div>
-      <div style="font-size:11px;color:var(--muted)">FCR rate</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:2px">Target: 85%</div>
-    </div>
-    <div class="card-sm" style="text-align:center">
-      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--amber)" id="demo-time">0m</div>
-      <div style="font-size:11px;color:var(--muted)">Avg resolution</div>
-      <div style="font-size:11px;color:var(--green);margin-top:2px">↓ vs 47m before</div>
-    </div>
-    <div class="card-sm" style="text-align:center">
-      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#9b59b6" id="demo-saved">€0</div>
-      <div style="font-size:11px;color:var(--muted)">Engineer time saved</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:2px">this week</div>
-    </div>
-  </div>
-
-  <!-- Main demo area -->
-  <div class="g2" style="flex:1">
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted);margin-bottom:2px">INCOMING TICKET QUEUE — AI PROCESSING</div>
-      <div id="ticket-queue" style="display:flex;flex-direction:column;gap:8px;overflow-y:auto;flex:1"></div>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted);margin-bottom:2px">PREDICTIVE ALERTS — ENDPOINT HEALTH</div>
-      <div id="predictions" style="display:flex;flex-direction:column;gap:8px;overflow-y:auto;flex:1">
-        <div class="ticket-card" style="border-left:3px solid var(--red)">
-          <div class="ticket-priority"><span class="tag" style="background:#fde8e8;color:var(--red);font-size:9px">CRITICAL — 12h</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;font-family:'JetBrains Mono',monospace">DISK · ENDPOINT EP-0847</div>
-          <div style="font-size:13px;font-weight:500">Bakkerij De Wit — Workstation 3</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">SMART health: 94% degraded. 1,847 reallocated sectors. Historical match: 97% failure within 24h.</div>
-          <div style="margin-top:8px"><span class="ai-badge">RMM backup triggered automatically</span></div>
-        </div>
-        <div class="ticket-card" style="border-left:3px solid var(--amber)">
-          <div class="ticket-priority"><span class="tag" style="background:var(--amber-light);color:var(--amber);font-size:9px">WARNING — 48h</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;font-family:'JetBrains Mono',monospace">MEMORY · ENDPOINT EP-1203</div>
-          <div style="font-size:13px;font-weight:500">Tandartspraktijk Vos — Server 1</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">RAM utilization 94% avg last 7 days. Pattern matches pre-crash sequence seen 34 times in ticket history.</div>
-          <div style="margin-top:8px"><span class="ai-badge">Maintenance window scheduled</span></div>
-        </div>
-        <div class="ticket-card" style="border-left:3px solid var(--blue)">
-          <div class="ticket-priority"><span class="tag tag-blue" style="font-size:9px">INFO — 7d</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;font-family:'JetBrains Mono',monospace">LICENSE · TENANT ACC-0441</div>
-          <div style="font-size:13px;font-weight:500">Accountantskantoor Peters — M365</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">3 unused licenses detected. Copilot readiness audit recommended. SharePoint permissions: 127 issues found.</div>
-          <div style="margin-top:8px"><span class="ai-badge">Audit proposal auto-drafted</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ SLIDE 7: ROADMAP + CONTRACT ══ -->
-<div class="slide" id="s7">
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;height:100%">
-    <div>
-      <div class="tag tag-ink fade-1" style="width:fit-content">90-day execution plan</div>
-      <h2 class="heading fade-2" style="font-size:32px;margin:16px 0 24px">What I deliver.<br>Day by day.</h2>
-      <div class="timeline fade-3">
-        <div class="tl-item">
-          <div class="tl-left"><div class="tl-dot" style="background:var(--blue)"></div><div class="tl-line"></div></div>
-          <div class="tl-content">
-            <div class="roadmap-phase" style="border-color:var(--blue)">
-              <div class="roadmap-label">Days 1–30 — Internal audit</div>
-              <div class="roadmap-sub">Foundation and quick wins</div>
-              <div class="roadmap-items">
-                <div class="roadmap-item">Analyse PSA data — identify top 5 most time-consuming ticket types</div>
-                <div class="roadmap-item">Deploy AI triage for top 2 ticket categories</div>
-                <div class="roadmap-item">Establish secure AI guidelines and GDPR compliance framework</div>
-                <div class="roadmap-item">Assess current engineer AI usage and training gaps</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-left"><div class="tl-dot" style="background:var(--green)"></div><div class="tl-line"></div></div>
-          <div class="tl-content">
-            <div class="roadmap-phase" style="border-color:var(--green)">
-              <div class="roadmap-label">Days 31–60 — Productising</div>
-              <div class="roadmap-sub">ZakelijkWerken 4.0 launched</div>
-              <div class="roadmap-items">
-                <div class="roadmap-item">Package Copilot Readiness Audit into portfolio offering</div>
-                <div class="roadmap-item">Build first Private Azure OpenAI deployment for pilot client</div>
-                <div class="roadmap-item">Train 1st-line team on AI-assisted resolution workflow</div>
-                <div class="roadmap-item">Launch AI recruitment pipeline for department growth</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-left"><div class="tl-dot" style="background:var(--amber)"></div></div>
-          <div class="tl-content">
-            <div class="roadmap-phase" style="border-color:var(--amber)">
-              <div class="roadmap-label">Days 61–90 — Client rollout</div>
-              <div class="roadmap-sub">Revenue generating</div>
-              <div class="roadmap-items">
-                <div class="roadmap-item">Deploy with 3 beta clients — generate case studies</div>
-                <div class="roadmap-item">Predictive ML model live on RMM telemetry</div>
-                <div class="roadmap-item">Full sales team briefing on AI portfolio</div>
-                <div class="roadmap-item">MRR report: new AI revenue vs pre-AI baseline</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="fade-4">
-      <div class="tag tag-blue" style="width:fit-content;margin-bottom:16px">Contract options</div>
       <div style="display:flex;flex-direction:column;gap:12px">
-
-        <div class="contract-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-            <div>
-              <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px">ZZP / Freelance</div>
-              <div style="font-size:12px;color:var(--muted)">Project-based engagement</div>
-            </div>
-            <div style="text-align:right">
-              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--blue)">€85–€110</div>
-              <div style="font-size:11px;color:var(--muted)">per hour / ZZP rate</div>
-            </div>
-          </div>
-          <div style="font-size:12px;color:var(--ink2);line-height:1.5">Minimum 3-day per week commitment. Full autonomy. Invoice monthly. Exit with 30-day notice. Ideal if SF-ICT wants to test before committing.</div>
+        <div style="padding:14px;background:#d6f0f9;border-radius:8px;border-left:3px solid #1BA2D2">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#0477AE;margin-bottom:6px">MONTHS 1–3 — FOUNDATION</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:8px">Data pipeline + Ticket Intelligence</div>
+          <div style="font-size:12px;color:var(--ink2);line-height:1.6">Connect to PSA API (Autotask/HaloPSA). Ingest and clean 20 years of ticket data. Train base NLP model on historical tickets. Deploy Layer 1 — ticket intelligence live in PSA. Engineers see SAGE suggestions on every new ticket.</div>
+          <div style="margin-top:8px;font-size:11px;font-weight:600;color:#0477AE">Deliverable: Engineers save 30+ min per day by Month 3</div>
         </div>
 
-        <div class="contract-card featured">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-            <div>
-              <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--blue)">12-Month Employee Contract</div>
-              <div style="font-size:12px;color:var(--muted)">Head of AI — full department lead</div>
-            </div>
-            <div style="text-align:right">
-              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--blue)">€4,200–€5,500</div>
-              <div style="font-size:11px;color:var(--muted)">gross per month + bonus</div>
-            </div>
-          </div>
-          <div style="font-size:12px;color:var(--ink2);line-height:1.5;margin-bottom:12px">Full-time department head. Build the team from scratch. Revenue share on AI services sold. Performance bonus tied to MRR growth from AI portfolio.</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <span class="tag tag-blue" style="font-size:10px">Department budget control</span>
-            <span class="tag tag-green" style="font-size:10px">Revenue share</span>
-            <span class="tag tag-amber" style="font-size:10px">Build the team</span>
-          </div>
+        <div style="padding:14px;background:var(--green-lt);border-radius:8px;border-left:3px solid var(--green)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);margin-bottom:6px">MONTHS 4–6 — INTELLIGENCE</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:8px">Decoder + Fleet Monitor + Update Intel</div>
+          <div style="font-size:12px;color:var(--ink2);line-height:1.6">Deploy Vague Resolution Decoder — convert all historic notes to structured knowledge. Build Fleet Health Monitor via RMM API. Launch Update Impact Intelligence with daily morning reports. All 1,000+ endpoints visible in one dashboard.</div>
+          <div style="margin-top:8px;font-size:11px;font-weight:600;color:var(--green)">Deliverable: Zero "surprise failures" — everything predicted in advance</div>
         </div>
 
-        <div class="contract-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-            <div>
-              <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px">Hybrid — Employee + Polypus Intel</div>
-              <div style="font-size:12px;color:var(--muted)">Part-time + AI consultancy</div>
-            </div>
-            <div style="text-align:right">
-              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--green)">€2,800–€3,500</div>
-              <div style="font-size:11px;color:var(--muted)">part-time + retained</div>
-            </div>
-          </div>
-          <div style="font-size:12px;color:var(--ink2);line-height:1.5">3 days/week for SF-ICT. 2 days for Polypus Intelligence. Best of both worlds — SF-ICT gets dedicated AI leadership, Victor retains entrepreneurial track.</div>
+        <div style="padding:14px;background:var(--amber-lt);border-radius:8px;border-left:3px solid var(--amber)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--amber);margin-bottom:6px">MONTHS 7–12 — PREDICTION + OPTIMISATION</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:8px">Predictive ML + Client Predictor + AI Recruitment</div>
+          <div style="font-size:12px;color:var(--ink2);line-height:1.6">Train ML failure prediction model on combined telemetry + ticket history. Deploy Client Needs Predictor. Launch AI recruitment pipeline for department growth. SAGE is now fully self-improving — every closed ticket makes it smarter.</div>
+          <div style="margin-top:8px;font-size:11px;font-weight:600;color:var(--amber)">Deliverable: SAGE is a permanent competitive asset for SF-ICT</div>
         </div>
+      </div>
+    </div>
 
-        <div style="padding:16px;background:var(--surface);border-radius:8px;border:1px solid var(--border)">
-          <div style="font-size:12px;color:var(--ink2);line-height:1.6"><strong>My recommendation:</strong> Start with the 12-month contract. SF-ICT gains a full AI department head who is invested in growing the business. The revenue share aligns incentives — I only make more if SF-ICT makes more. This is not a cost center. It is a revenue generator.</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted)">TECHNOLOGY STACK</div>
+      <div class="card">
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+          <div style="display:grid;grid-template-columns:120px 1fr;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+            <div style="color:var(--muted);font-size:11px;font-family:'JetBrains Mono',monospace">AI / LLM</div>
+            <div>Azure OpenAI (private, GDPR compliant) + fine-tuning on SF-ICT data</div>
+          </div>
+          <div style="display:grid;grid-template-columns:120px 1fr;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+            <div style="color:var(--muted);font-size:11px;font-family:'JetBrains Mono',monospace">ML model</div>
+            <div>Python + scikit-learn + PyTorch for predictive failure detection</div>
+          </div>
+          <div style="display:grid;grid-template-columns:120px 1fr;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+            <div style="color:var(--muted);font-size:11px;font-family:'JetBrains Mono',monospace">PSA</div>
+            <div>Autotask / HaloPSA / ConnectWise API — read + write tickets</div>
+          </div>
+          <div style="display:grid;grid-template-columns:120px 1fr;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+            <div style="color:var(--muted);font-size:11px;font-family:'JetBrains Mono',monospace">RMM</div>
+            <div>NinjaOne / Datto API — endpoint telemetry + script deployment</div>
+          </div>
+          <div style="display:grid;grid-template-columns:120px 1fr;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+            <div style="color:var(--muted);font-size:11px;font-family:'JetBrains Mono',monospace">Dashboard</div>
+            <div>React + Vercel — engineers access via browser, any device</div>
+          </div>
+          <div style="display:grid;grid-template-columns:120px 1fr;gap:8px">
+            <div style="color:var(--muted);font-size:11px;font-family:'JetBrains Mono',monospace">Data</div>
+            <div>PostgreSQL on-premise at SF-ICT — data never leaves the building</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="background:var(--ink)">
+        <div style="font-size:11px;color:rgba(255,255,255,.4);font-family:'JetBrains Mono',monospace;margin-bottom:10px">THE KEY PRINCIPLE</div>
+        <div style="font-size:14px;color:white;line-height:1.65">SAGE is not a product you subscribe to and cancel. It is infrastructure — like the RMM. It becomes more valuable the longer it runs. After 12 months it is deeply embedded in how SF-ICT operates. That is the strategic value.</div>
+      </div>
+
+      <div class="card" style="border-color:#0477AE">
+        <div style="font-size:11px;color:#0477AE;font-family:'JetBrains Mono',monospace;margin-bottom:8px">WHAT SF-ICT OWNS</div>
+        <div style="font-size:13px;color:var(--ink2);line-height:1.6">All code, all models, all data pipelines — owned by SF-ICT. Victor builds it, documents it, and trains the team to run it. This is not a black box dependency. It is your asset.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 7: CONTRACT ══ -->
+<div class="slide" id="s7">
+  <div class="tag t-ink f1" style="width:fit-content">The engagement</div>
+  <h1 class="heading f2" style="font-size:40px;margin:14px 0 24px">How we work together.<br>What you get. <span style="color:#0477AE">What it costs.</span></h1>
+
+  <div class="g3 f3" style="margin-bottom:16px">
+    <div class="ccard">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:6px">ZZP / Freelance</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px">Project delivery, flexible</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#0477AE;margin-bottom:4px">€85–€110</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">per hour · invoiced monthly</div>
+      <div style="font-size:12px;color:var(--ink2);line-height:1.6">Minimum 3 days/week. Full technical autonomy. 30-day exit notice. Victor manages delivery independently. Good if SF-ICT wants to test first.</div>
+    </div>
+
+    <div class="ccard best">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:#0477AE;margin-bottom:6px">12-Month Employee</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px">Head of AI — Department Lead</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#0477AE;margin-bottom:4px">€4,200–€5,500</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">gross/month + performance bonus</div>
+      <div style="font-size:12px;color:var(--ink2);line-height:1.6;margin-bottom:12px">Full SAGE system delivered over 12 months. Victor embedded in the team. Bonus tied to measurable outcomes: ticket volume reduction, engineer time saved, predictive accuracy.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <span class="tag t-blue" style="font-size:9px">Full system ownership</span>
+        <span class="tag t-green" style="font-size:9px">Performance bonus</span>
+        <span class="tag t-amber" style="font-size:9px">Team training included</span>
+      </div>
+    </div>
+
+    <div class="ccard">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:6px">Hybrid — 3+2</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px">Part-time employee + consultancy</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--green);margin-bottom:4px">€2,800–€3,500</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">part-time salary per month</div>
+      <div style="font-size:12px;color:var(--ink2);line-height:1.6">3 days/week for SF-ICT SAGE build. 2 days for external consultancy. Keeps Victor's broader market position while SF-ICT gets dedicated AI leadership.</div>
+    </div>
+  </div>
+
+  <div class="card f4" style="background:#dbeaf6">
+    <div class="g3" style="gap:24px;align-items:center">
+      <div style="grid-column:span 2">
+        <div style="font-size:13px;color:var(--ink2);line-height:1.7"><strong>My recommendation for SF-ICT:</strong> The 12-month employee contract. Here is why. SAGE is not a 3-month project — it is a 12-month infrastructure build that transforms how SF-ICT operates. It requires someone embedded in the team, who understands the PSA data, who can sit with engineers and iterate daily. A ZZP contractor builds something and leaves. An employee builds something and then makes sure it works, improves it, and trains the team to own it. The performance bonus means my success is directly tied to SF-ICT's results. I only earn more if you save more.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="csm" style="text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--green)">↓40%</div>
+          <div style="font-size:11px;color:var(--muted)">Ticket handling cost</div>
+        </div>
+        <div class="csm" style="text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:#0477AE">↑30%</div>
+          <div style="font-size:11px;color:var(--muted)">Engineer capacity</div>
+        </div>
+        <div class="csm" style="text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--amber)">0</div>
+          <div style="font-size:11px;color:var(--muted)">Competitors with this</div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══ SLIDE 8: CLOSE ══ -->
+<!-- ══ 8: CLOSE ══ -->
 <div class="slide" id="s8">
-  <div style="display:flex;align-items:center;justify-content:center;flex:1;flex-direction:column;gap:32px">
+  <div style="display:flex;align-items:center;justify-content:center;flex:1;flex-direction:column;gap:28px">
     <div style="text-align:center">
-      <div class="tag tag-ink" style="margin-bottom:20px">The decision</div>
-      <h1 class="display" style="font-size:64px;line-height:.92;margin-bottom:24px">SF-ICT becomes<br>the <span style="color:var(--blue)">AI-first MSP</span><br>of Noord-Brabant.</h1>
-      <p style="font-size:18px;color:var(--muted);max-width:560px;margin:0 auto;line-height:1.6">Every client in your portfolio needs an AI strategy. You can be the MSP that delivers it — or watch a competitor take that relationship.</p>
+      <div class="tag t-ink" style="margin-bottom:20px">The question</div>
+      <h1 class="display" style="font-size:62px;line-height:.9;margin-bottom:24px">SF-ICT built 20 years<br>of knowledge.<br><span style="background:linear-gradient(135deg,#1BA2D2,#E4067D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">SAGE makes it<br>available in seconds.</span></h1>
+      <p style="font-size:16px;color:var(--muted);max-width:520px;margin:0 auto;line-height:1.65">Every ticket your engineers have ever solved, every failure pattern, every client quirk — instantly queryable by AI. The system your competitors cannot build because they don't have your data.</p>
     </div>
-    <div class="g3" style="max-width:700px;width:100%">
+    <div class="g4" style="max-width:680px;width:100%">
       <div class="card" style="text-align:center">
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--green)">€200k+</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px">New MRR potential year one</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#0477AE">6</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">AI layers built</div>
       </div>
       <div class="card" style="text-align:center">
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--blue)">↓40%</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px">Ticket handling cost</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--green)">12mo</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Full system delivered</div>
       </div>
       <div class="card" style="text-align:center">
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--amber)">90</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px">Days to first client results</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--amber)">↓40%</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Ticket cost</div>
+      </div>
+      <div class="card" style="text-align:center;background:var(--ink)">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:white">∞</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:3px">Competitive moat</div>
       </div>
     </div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)">
-      Victor Citroen — victor@polypusintelligence.ch — Zürich / Available Netherlands
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)">
+      Victor Citroen · victor@polypusintelligence.ch · Available from May 2026
     </div>
   </div>
 </div>
 
 </div><!-- end deck -->
 
-<!-- NAV BAR -->
-<div class="nav" id="nav-bar">
-  <button class="nav-btn" onclick="prev()">←</button>
-  <div id="nav-dots" style="display:flex;gap:6px"></div>
-  <button class="nav-btn" onclick="next()">→</button>
-  <span class="slide-num" id="slide-num">01 / 09</span>
+<!-- NAV -->
+<div class="nav" id="nav">
+  <button class="nbtn" onclick="prev()">←</button>
+  <div id="dots" style="display:flex;gap:6px"></div>
+  <button class="nbtn" onclick="next()">→</button>
+  <span class="nnum" id="nnum">01/09</span>
 </div>
 
 <script>
-const slides = document.querySelectorAll('.slide');
-const total = slides.length;
-let current = 0;
-
-// Build nav dots
-const dotsEl = document.getElementById('nav-dots');
-slides.forEach((_, i) => {
-  const d = document.createElement('div');
-  d.className = 'nav-dot' + (i === 0 ? ' active' : '');
-  d.onclick = () => goTo(i);
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+let cur=0;
+const dotsEl=document.getElementById('dots');
+slides.forEach((_,i)=>{
+  const d=document.createElement('div');
+  d.className='dot'+(i===0?' on':'');
+  d.onclick=()=>goTo(i);
   dotsEl.appendChild(d);
 });
-
-function goTo(n) {
-  slides[current].classList.remove('active');
-  dotsEl.children[current].classList.remove('active');
-  current = Math.max(0, Math.min(n, total - 1));
-  slides[current].classList.add('active');
-  dotsEl.children[current].classList.add('active');
-  document.getElementById('slide-num').textContent =
-    String(current + 1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
-
-  // Start demo if on slide 6
-  if (current === 6) startDemo();
+function goTo(n){
+  slides[cur].classList.remove('active');
+  dotsEl.children[cur].classList.remove('on');
+  cur=Math.max(0,Math.min(n,total-1));
+  slides[cur].classList.add('active');
+  dotsEl.children[cur].classList.add('on');
+  document.getElementById('nnum').textContent=String(cur+1).padStart(2,'0')+'/'+String(total).padStart(2,'0');
+  if(cur===5)startFleet();
 }
-
-function next() { goTo(current + 1); }
-function prev() { goTo(current - 1); }
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); next(); }
-  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prev(); }
+function next(){goTo(cur+1)}
+function prev(){goTo(cur-1)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next()}
+  if(e.key==='ArrowLeft'){e.preventDefault();prev()}
 });
 
-// ── LIVE DEMO ENGINE ──────────────────────────────────────────
-const TICKETS = [
-  { client: 'Bakkerij De Wit', issue: 'Outlook niet te openen', priority: 'P3', cat: 'M365', ai_cat: 'Email / M365', resolution: 'OST cache clear via RMM', confidence: 94, mins: 0, auto: true },
-  { client: 'Tandartspraktijk Vos', issue: 'Wachtwoord vergeten', priority: 'P4', cat: 'Account', ai_cat: 'Password Reset', resolution: 'Self-service reset portal link sent', confidence: 99, mins: 0, auto: true },
-  { client: 'Loodgietersbedrijf Smit', issue: 'Printer werkt niet', priority: 'P3', cat: 'Hardware', ai_cat: 'Printer / Peripheral', resolution: 'Driver reinstall via RMM', confidence: 87, mins: 4, auto: false },
-  { client: 'Fysiotherapie Noord', issue: 'VPN verbinding verbroken', priority: 'P2', cat: 'Network', ai_cat: 'VPN / Connectivity', resolution: 'FortiClient config push via Intune', confidence: 91, mins: 0, auto: true },
-  { client: 'Accountantskantoor Peters', issue: 'Teams video werkt niet', priority: 'P3', cat: 'M365', ai_cat: 'Teams / AV', resolution: 'Camera driver update via RMM', confidence: 82, mins: 7, auto: false },
-  { client: 'Restaurant Bregje', issue: 'Nieuwe medewerker aanmaken', priority: 'P4', cat: 'Onboarding', ai_cat: 'User Provisioning', resolution: 'M365 account + Intune enrollment automated', confidence: 98, mins: 0, auto: true },
-  { client: 'Kapsalon Stijl', issue: 'Geen internet op werkplek', priority: 'P2', cat: 'Network', ai_cat: 'Network / DHCP', resolution: 'IP conflict detected — DHCP reservation created', confidence: 89, mins: 3, auto: false },
+// ── FLEET DEMO ──────────────────────────────────────────────────
+const CLIENTS=[
+  {name:'Bakkerij De Wit',eps:23,healthy:19,warn:3,crit:1},
+  {name:'Tandartspraktijk Vos',eps:8,healthy:5,warn:2,crit:1},
+  {name:'Accountantskantoor Peters',eps:34,healthy:31,warn:3,crit:0},
+  {name:'Loodgietersbedrijf Smit',eps:12,healthy:11,warn:1,crit:0},
+  {name:'Fysiotherapie Noord',eps:6,healthy:5,warn:1,crit:0},
+  {name:'Restaurant Bregje',eps:4,healthy:4,warn:0,crit:0},
+  {name:'Kapsalon Stijl',eps:3,healthy:2,warn:1,crit:0},
+];
+const PREDS=[
+  {ep:'EP-0847',client:'Bakkerij De Wit',type:'Disk failure',eta:'12h',conf:97,color:'var(--red)',action:'Backup verified · Replacement disk ordered via RMM alert'},
+  {ep:'EP-1203',client:'Tandartspraktijk Vos',type:'Memory exhaustion',eta:'48h',conf:89,color:'var(--amber)',action:'Maintenance window scheduled Thursday 21:00'},
+  {ep:'EP-0234',client:'Accountantskantoor Peters',type:'SSD wear 91%',eta:'7d',conf:76,color:'var(--amber)',action:'Proactive replacement quote sent to client'},
+  {ep:'EP-0156',client:'Fysiotherapie Noord',type:'Network adapter failure',eta:'14d',conf:62,color:'var(--blue)',action:'Monitoring intensified · driver update queued'},
 ];
 
-let demoInterval = null;
-let demoStats = { tickets: 0, autoResolved: 0, totalTime: 0, saved: 0 };
-let ticketQueue = [];
+let fleetStarted=false;
+function startFleet(){
+  if(fleetStarted)return; fleetStarted=true;
+  // Animate counters
+  const tot=CLIENTS.reduce((s,c)=>s+c.eps,0);
+  const h=CLIENTS.reduce((s,c)=>s+c.healthy,0);
+  const w=CLIENTS.reduce((s,c)=>s+c.warn,0);
+  const cr=CLIENTS.reduce((s,c)=>s+c.crit,0);
+  animNum('fl-healthy',0,h,800);
+  animNum('fl-warn',0,w,900);
+  animNum('fl-crit',0,cr,1000);
+  animNum('fl-pred',0,PREDS.length,600);
 
-function startDemo() {
-  if (demoInterval) return;
-  demoStats = { tickets: 0, autoResolved: 0, totalTime: 0, saved: 0 };
-  ticketQueue = [];
-  document.getElementById('ticket-queue').innerHTML = '';
-
-  let idx = 0;
-  demoInterval = setInterval(() => {
-    const t = TICKETS[idx % TICKETS.length];
-    idx++;
-    addTicket(t);
-    demoStats.tickets++;
-    if (t.auto) { demoStats.autoResolved++; demoStats.saved += 35; }
-    demoStats.totalTime = t.auto ? demoStats.totalTime : demoStats.totalTime + t.mins;
-
-    const fcr = Math.round((demoStats.autoResolved / demoStats.tickets) * 100);
-    const avgTime = demoStats.tickets > 0 ? Math.round(demoStats.totalTime / Math.max(1, demoStats.tickets - demoStats.autoResolved)) : 0;
-
-    document.getElementById('demo-tickets').textContent = demoStats.tickets;
-    document.getElementById('demo-auto').textContent = Math.round((demoStats.autoResolved / demoStats.tickets) * 100) + '% auto-resolved';
-    document.getElementById('demo-fcr').textContent = fcr + '%';
-    document.getElementById('demo-time').textContent = (avgTime || 12) + 'm';
-    document.getElementById('demo-saved').textContent = '€' + demoStats.saved.toLocaleString();
-  }, 2200);
-}
-
-function addTicket(t) {
-  const queue = document.getElementById('ticket-queue');
-  const el = document.createElement('div');
-  el.className = 'ticket-card';
-  const pColors = { P1: 'var(--red)', P2: 'var(--amber)', P3: 'var(--blue)', P4: 'var(--muted)' };
-  el.innerHTML = `
-    <div class="ticket-priority"><span class="tag" style="background:${pColors[t.priority]}22;color:${pColors[t.priority]};font-size:9px">${t.priority} · ${t.cat}</span></div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:3px;font-family:'JetBrains Mono',monospace">${t.client}</div>
-    <div style="font-size:13px;font-weight:500;margin-bottom:6px">${t.issue}</div>
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <span class="ai-badge" style="font-size:9px">AI: ${t.ai_cat} · ${t.confidence}%</span>
-      ${t.auto
-        ? `<span class="tag tag-green" style="font-size:9px">AUTO-RESOLVED</span>`
-        : `<span class="tag tag-amber" style="font-size:9px">→ 2nd line · est. ${t.mins}m</span>`
-      }
+  // Predictions
+  const pl=document.getElementById('pred-list');
+  pl.innerHTML=PREDS.map(p=>`
+    <div class="tkt" style="border-left:3px solid ${p.color};margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+        <div>
+          <div style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace">${p.ep} · ${p.client}</div>
+          <div style="font-size:13px;font-weight:500;margin-top:2px">${p.type}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${p.color}">${p.eta}</div>
+          <div style="font-size:10px;color:var(--muted)">${p.conf}% conf</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted)">${p.action}</div>
     </div>
-    ${t.auto ? `<div style="font-size:11px;color:var(--muted);margin-top:6px">${t.resolution}</div>` : ''}
-  `;
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(-8px)';
-  el.style.transition = 'all .3s ease';
-  queue.insertBefore(el, queue.firstChild);
-  requestAnimationFrame(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; });
-  while (queue.children.length > 4) queue.removeChild(queue.lastChild);
+  `).join('');
+
+  // Client list
+  const cl=document.getElementById('fleet-clients');
+  cl.innerHTML=CLIENTS.map(c=>{
+    const pct=Math.round((c.healthy/c.eps)*100);
+    const col=c.crit>0?'var(--red)':c.warn>0?'var(--amber)':'var(--green)';
+    return `<div class="csm" style="display:flex;flex-direction:column;gap:6px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:13px;font-weight:500">${c.name}</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${col}">${pct}% healthy</div>
+      </div>
+      <div class="bar"><div class="bfill" style="width:${pct}%;background:${col}"></div></div>
+      <div style="display:flex;gap:10px;font-size:10px;color:var(--muted)">
+        <span>${c.eps} endpoints</span>
+        ${c.crit>0?`<span style="color:var(--red);font-weight:600">${c.crit} critical</span>`:''}
+        ${c.warn>0?`<span style="color:var(--amber)">${c.warn} warnings</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
 }
 
-// Stop demo when leaving slide
-const observer = new MutationObserver(() => {
-  if (!slides[6].classList.contains('active') && demoInterval) {
-    clearInterval(demoInterval);
-    demoInterval = null;
+function animNum(id,from,to,dur){
+  const el=document.getElementById(id);
+  const start=performance.now();
+  function step(now){
+    const p=Math.min((now-start)/dur,1);
+    el.textContent=Math.round(from+(to-from)*p);
+    if(p<1)requestAnimationFrame(step);
   }
-});
-observer.observe(slides[6], { attributes: true });
+  requestAnimationFrame(step);
+}
 </script>
 </body>
 </html>
