@@ -730,20 +730,36 @@ function initCharts() {
     tooltip: { style:{fontFamily:'JetBrains Mono'} },
   }).render();
 
-  // Resolution time comparison
+  // Resolution time comparison - fixed design
   new ApexCharts(document.getElementById('chart-resolution'), {
-    chart: { type:'bar', height:140, toolbar:{show:false} },
+    chart: { type:'bar', height:140, toolbar:{show:false}, stacked:false },
     series: [
       { name:'Before SAGE', data:[47,52,43,61,38,55,49] },
       { name:'With SAGE', data:[12,9,14,8,11,7,10] }
     ],
-    colors: ['#766A86','#1BA2D2'],
-    plotOptions: { bar:{ columnWidth:'55%', borderRadius:3 } },
-    xaxis: { categories:['M365','Network','Print','Account','Teams','VPN','Server'], labels:{style:{fontFamily:'JetBrains Mono',fontSize:'9px',colors:Array(7).fill('#6b6b8a')}} },
-    yaxis: { labels:{formatter:v=>v+'m', style:{fontFamily:'JetBrains Mono',fontSize:'9px',colors:['#6b6b8a']}} },
-    grid: { borderColor:'#2a2a3f' },
-    legend: { labels:{colors:['#e2e2f0','#e2e2f0']}, fontFamily:'JetBrains Mono', fontSize:'10px' },
-    tooltip: { style:{fontFamily:'JetBrains Mono'} },
+    colors: ['#94a3b8','#1BA2D2'],
+    plotOptions: { bar:{ columnWidth:'60%', borderRadius:2, dataLabels:{position:'top'} } },
+    dataLabels: {
+      enabled:true,
+      formatter: v => v+'m',
+      style:{ fontFamily:'JetBrains Mono', fontSize:'9px', colors:['#232430','#0477AE'] },
+      offsetY: -14
+    },
+    xaxis: {
+      categories:['M365','Network','Print','Account','Teams','VPN','Server'],
+      labels:{style:{fontFamily:'JetBrains Mono',fontSize:'9px',colors:Array(7).fill('#766A86')}}
+    },
+    yaxis: {
+      labels:{formatter:v=>v+'m', style:{fontFamily:'JetBrains Mono',fontSize:'9px',colors:['#766A86']}},
+      max:80
+    },
+    grid: { borderColor:'#c8dff0' },
+    legend: {
+      labels:{colors:['#232430','#232430']},
+      fontFamily:'JetBrains Mono', fontSize:'10px',
+      markers:{width:10,height:10,radius:2}
+    },
+    tooltip: { style:{fontFamily:'JetBrains Mono'}, y:{formatter:v=>v+' min'} },
   }).render();
 
   // Ticket categories donut
