@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SF-ICT × AI — ZakelijkWerken 4.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f3ee;
+  --ink: #0e0e0e;
+  --ink2: #3a3a3a;
+  --muted: #8a8a8a;
+  --blue: #0054a6;
+  --blue-light: #e8f0fb;
+  --green: #0a7c4f;
+  --green-light: #e4f5ee;
+  --amber: #b45309;
+  --amber-light: #fef3c7;
+  --red: #c0392b;
+  --border: #d8d4cc;
+  --white: #ffffff;
+  --card: #ffffff;
+  --surface: #f0ede6;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Instrument Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  overflow: hidden;
+  height: 100vh;
+  cursor: default;
+}
+
+/* ── DECK STRUCTURE ── */
+.deck { width: 100vw; height: 100vh; position: relative; }
+.slide {
+  position: absolute; inset: 0;
+  display: none; flex-direction: column;
+  padding: 60px 72px;
+  opacity: 0; transition: opacity .4s ease;
+}
+.slide.active { display: flex; opacity: 1; }
+
+/* ── NAV ── */
+.nav {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 16px; z-index: 100;
+  background: var(--ink); padding: 10px 20px; border-radius: 40px;
+}
+.nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,.3); cursor: pointer; transition: all .2s;
+}
+.nav-dot.active { background: white; width: 20px; border-radius: 3px; }
+.nav-btn {
+  background: none; border: none; color: white; cursor: pointer;
+  font-size: 16px; padding: 0 4px; opacity: .7; transition: opacity .2s;
+}
+.nav-btn:hover { opacity: 1; }
+.slide-num {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: rgba(255,255,255,.4); letter-spacing: .1em;
+}
+
+/* ── TYPOGRAPHY ── */
+.display { font-family: 'Syne', sans-serif; font-weight: 800; line-height: .95; }
+.heading { font-family: 'Syne', sans-serif; font-weight: 700; line-height: 1.1; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* ── TAGS ── */
+.tag {
+  display: inline-block; font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 4px; font-weight: 500;
+}
+.tag-blue { background: var(--blue-light); color: var(--blue); }
+.tag-green { background: var(--green-light); color: var(--green); }
+.tag-amber { background: var(--amber-light); color: var(--amber); }
+.tag-ink { background: var(--ink); color: white; }
+
+/* ── CARDS ── */
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 24px;
+}
+.card-sm { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+
+/* ── GRIDS ── */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+
+/* ── METRIC ── */
+.metric-num {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: 44px; line-height: 1; color: var(--blue);
+}
+.metric-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.metric-sub { font-size: 13px; color: var(--ink2); margin-top: 6px; }
+
+/* ── PROGRESS ── */
+.bar-wrap { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin: 6px 0; }
+.bar-fill { height: 100%; border-radius: 3px; }
+
+/* ── TIMELINE ── */
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.tl-item { display: flex; gap: 20px; }
+.tl-left { display: flex; flex-direction: column; align-items: center; width: 32px; flex-shrink: 0; }
+.tl-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--blue); flex-shrink: 0; margin-top: 4px; }
+.tl-line { width: 2px; flex: 1; background: var(--border); margin: 4px 0; }
+.tl-content { padding-bottom: 24px; flex: 1; }
+
+/* ── SLIDE-SPECIFIC ── */
+
+/* Cover */
+#s0 { background: var(--ink); justify-content: center; }
+#s0 .kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .14em; color: rgba(255,255,255,.4); text-transform: uppercase; margin-bottom: 32px; }
+#s0 .title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 72px; line-height: .92; color: white; }
+#s0 .title span { color: #4fa3e0; }
+#s0 .sub { font-size: 18px; color: rgba(255,255,255,.5); margin-top: 24px; max-width: 560px; line-height: 1.5; }
+#s0 .corner { position: absolute; bottom: 60px; right: 72px; text-align: right; }
+#s0 .corner p { font-size: 12px; color: rgba(255,255,255,.3); font-family: 'JetBrains Mono', monospace; }
+#s0 .grid-bg {
+  position: absolute; inset: 0; opacity: .06;
+  background-image: linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Agenda */
+#s1 .agenda-items { display: flex; flex-direction: column; gap: 2px; margin-top: 32px; }
+#s1 .agenda-item {
+  display: flex; align-items: center; gap: 20px;
+  padding: 18px 24px; border-radius: 8px;
+  background: var(--surface); border: 1px solid transparent;
+  transition: all .2s; cursor: pointer;
+}
+#s1 .agenda-item:hover { background: var(--white); border-color: var(--border); }
+#s1 .agenda-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); width: 24px; }
+#s1 .agenda-title { font-size: 15px; font-weight: 500; flex: 1; }
+#s1 .agenda-tag { }
+
+/* Opportunity */
+#s2 .big-stat { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 88px; line-height: 1; color: var(--blue); }
+
+/* Dashboard slide */
+#s6 { padding: 32px 48px; }
+
+/* Impact */
+.impact-row { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.impact-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+
+/* Live demo ticker */
+.ticker-wrap { overflow: hidden; background: var(--ink); border-radius: 6px; padding: 8px 16px; }
+.ticker { display: flex; gap: 32px; animation: ticker 20s linear infinite; white-space: nowrap; }
+@keyframes ticker { 0%{ transform: translateX(0)} 100%{ transform: translateX(-50%)} }
+.ticker-item { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,.5); }
+.ticker-item span { color: #4fa3e0; }
+
+/* Ticket demo */
+.ticket-card {
+  border: 1px solid var(--border); border-radius: 8px; padding: 14px;
+  background: var(--white); position: relative;
+}
+.ticket-priority { position: absolute; top: 14px; right: 14px; }
+.ai-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--blue-light); color: var(--blue);
+  font-size: 10px; font-family: 'JetBrains Mono', monospace;
+  padding: 3px 8px; border-radius: 4px;
+}
+.ai-badge::before { content: '◈'; font-size: 10px; }
+
+/* Pulse animation */
+@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: inline-block; animation: pulse-dot 1.5s infinite; }
+
+/* Fade in items */
+@keyframes fadeUp { from{ opacity:0; transform: translateY(16px)} to{ opacity:1; transform:translateY(0)} }
+.fade-1 { animation: fadeUp .5s .1s both; }
+.fade-2 { animation: fadeUp .5s .2s both; }
+.fade-3 { animation: fadeUp .5s .35s both; }
+.fade-4 { animation: fadeUp .5s .5s both; }
+.fade-5 { animation: fadeUp .5s .65s both; }
+
+/* Roadmap bars */
+.roadmap-phase { border-left: 3px solid var(--blue); padding-left: 16px; margin-bottom: 20px; }
+.roadmap-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; }
+.roadmap-sub { font-size: 12px; color: var(--muted); margin: 4px 0 10px; }
+.roadmap-items { display: flex; flex-direction: column; gap: 6px; }
+.roadmap-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.roadmap-item::before { content: '→'; color: var(--blue); font-size: 12px; flex-shrink: 0; }
+
+/* Contract options */
+.contract-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 24px; position: relative;
+}
+.contract-card.featured { border-color: var(--blue); }
+.contract-card.featured::before {
+  content: 'RECOMMENDED';
+  position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+  background: var(--blue); color: white; font-size: 9px; font-family: 'JetBrains Mono', monospace;
+  letter-spacing: .1em; padding: 3px 10px; border-radius: 4px;
+}
+
+/* Scrollable in slide */
+.scroll-inner { overflow-y: auto; flex: 1; padding-right: 4px; }
+.scroll-inner::-webkit-scrollbar { width: 3px; }
+.scroll-inner::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+<!-- ══ SLIDE 0: COVER ══ -->
+<div class="slide active" id="s0">
+  <div class="grid-bg"></div>
+  <div style="position:relative;z-index:1">
+    <div class="kicker">SF-ICT × AI Division — Confidential Proposal — April 2026</div>
+    <div class="title">Introducing<br><span>ZakelijkWerken</span><br>4.0</div>
+    <div class="sub">How SF-ICT becomes the first MSP in Noord-Brabant to offer a complete AI-as-a-Service layer — protecting MRR, reducing ticket volume, and opening a new revenue stream worth €200k+ in year one.</div>
+  </div>
+  <div class="corner">
+    <p>Presented by Victor Citroen</p>
+    <p style="margin-top:4px">Polypus Intelligence</p>
+  </div>
+</div>
+
+<!-- ══ SLIDE 1: AGENDA ══ -->
+<div class="slide" id="s1">
+  <div class="tag tag-ink fade-1" style="width:fit-content">Today's agenda</div>
+  <h1 class="heading fade-2" style="font-size:42px;margin-top:16px">What we cover<br>in the next 30 minutes</h1>
+  <div class="agenda-items fade-3">
+    <div class="agenda-item" onclick="goTo(2)">
+      <span class="agenda-num">01</span>
+      <span class="agenda-title">The opportunity — why AI, why now, why SF-ICT</span>
+      <span class="tag tag-blue">5 min</span>
+    </div>
+    <div class="agenda-item" onclick="goTo(3)">
+      <span class="agenda-num">02</span>
+      <span class="agenda-title">Pillar 1 — Internal AI: reducing tickets & cost</span>
+      <span class="tag tag-green">8 min</span>
+    </div>
+    <div class="agenda-item" onclick="goTo(4)">
+      <span class="agenda-num">03</span>
+      <span class="agenda-title">Pillar 2 — External AI: new MRR & client services</span>
+      <span class="tag tag-green">8 min</span>
+    </div>
+    <div class="agenda-item" onclick="goTo(5)">
+      <span class="agenda-num">04</span>
+      <span class="agenda-title">The 20-year ticket data — what it unlocks</span>
+      <span class="tag tag-amber">5 min</span>
+    </div>
+    <div class="agenda-item" onclick="goTo(6)">
+      <span class="agenda-num">05</span>
+      <span class="agenda-title">Live demo — AI ticket triage dashboard</span>
+      <span class="tag tag-blue">3 min</span>
+    </div>
+    <div class="agenda-item" onclick="goTo(7)">
+      <span class="agenda-num">06</span>
+      <span class="agenda-title">90-day plan + contract options</span>
+      <span class="tag tag-ink">4 min</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 2: OPPORTUNITY ══ -->
+<div class="slide" id="s2">
+  <div style="display:flex;gap:48px;height:100%">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+      <div class="tag tag-amber fade-1" style="width:fit-content">The market reality</div>
+      <h1 class="heading fade-2" style="font-size:48px;margin-top:16px;margin-bottom:32px">Your clients are<br>already using AI.<br>They need <span style="color:var(--blue)">your guidance.</span></h1>
+      <div style="display:flex;flex-direction:column;gap:16px" class="fade-3">
+        <div class="impact-row">
+          <div class="impact-icon" style="background:var(--amber-light)">⚠</div>
+          <div><strong>73% of SMBs</strong> are using free ChatGPT for work — uploading sensitive client data to public servers. GDPR violation risk.</div>
+        </div>
+        <div class="impact-row">
+          <div class="impact-icon" style="background:var(--blue-light)">📋</div>
+          <div><strong>M365 Copilot</strong> is being purchased without proper SharePoint permissions — any employee can query confidential HR data.</div>
+        </div>
+        <div class="impact-row">
+          <div class="impact-icon" style="background:var(--green-light)">💶</div>
+          <div>Dutch SMBs spent <strong>€340M on AI tools</strong> in 2025. Only 12% were guided by their MSP. That 88% gap is SF-ICT's opportunity.</div>
+        </div>
+      </div>
+    </div>
+    <div style="width:320px;display:flex;flex-direction:column;gap:12px;justify-content:center" class="fade-4">
+      <div class="card" style="text-align:center;border-color:var(--blue)">
+        <div class="big-stat">88%</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:8px">of AI spending by Dutch SMBs happens WITHOUT MSP involvement</div>
+      </div>
+      <div class="card-sm" style="text-align:center">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--green)">€200k+</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">estimated new MRR potential for SF-ICT in year one</div>
+      </div>
+      <div class="card-sm" style="text-align:center;background:var(--ink)">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:white">First mover</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:4px">No competing MSP in Noord-Brabant has an AI department yet</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 3: PILLAR 1 — INTERNAL ══ -->
+<div class="slide" id="s3">
+  <div class="tag tag-green fade-1" style="width:fit-content">Pillar 1 — Internal AI</div>
+  <h1 class="heading fade-2" style="font-size:38px;margin-top:12px;margin-bottom:24px">Reducing tickets.<br>Protecting margins.</h1>
+  <div class="g3 fade-3" style="flex:1">
+
+    <div class="card" style="border-top:3px solid var(--blue)">
+      <div class="ai-badge" style="margin-bottom:12px">AI TRIAGE</div>
+      <div class="heading" style="font-size:18px;margin-bottom:8px">Intelligent ticket routing</div>
+      <div style="font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:16px">AI reads every incoming email to support@sf-ict.nl, classifies it (P1–P4), detects category (password reset, network, printer, M365), and routes to correct queue — before a human touches it.</div>
+      <div style="border-top:1px solid var(--border);padding-top:12px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">IMPACT</div>
+        <div style="font-size:13px;font-weight:600;color:var(--green)">↑ FCR rate by 30%</div>
+        <div style="font-size:13px;font-weight:600;color:var(--blue)">↓ 1st-line admin load by 40%</div>
+      </div>
+    </div>
+
+    <div class="card" style="border-top:3px solid var(--amber)">
+      <div class="ai-badge" style="margin-bottom:12px">AUTO-DOC</div>
+      <div class="heading" style="font-size:18px;margin-bottom:8px">Automated documentation</div>
+      <div style="font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:16px">When a ticket closes, AI reads the resolution notes and auto-generates a standardised IT Glue knowledge base article. "If it's not in IT Glue, it doesn't exist" — now enforced automatically.</div>
+      <div style="border-top:1px solid var(--border);padding-top:12px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">IMPACT</div>
+        <div style="font-size:13px;font-weight:600;color:var(--green)">↓ Repeat escalations</div>
+        <div style="font-size:13px;font-weight:600;color:var(--blue)">Knowledge base always current</div>
+      </div>
+    </div>
+
+    <div class="card" style="border-top:3px solid var(--green)">
+      <div class="ai-badge" style="margin-bottom:12px">ENG COPILOT</div>
+      <div class="heading" style="font-size:18px;margin-bottom:8px">Engineer AI assistant</div>
+      <div style="font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:16px">2nd-line engineers prompt AI to write PowerShell scripts for the RMM — deploying mass fixes across hundreds of endpoints in minutes. Complex Intune/Entra troubleshooting guided by AI trained on your ticket history.</div>
+      <div style="border-top:1px solid var(--border);padding-top:12px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">IMPACT</div>
+        <div style="font-size:13px;font-weight:600;color:var(--green)">↓ Resolution time 50%</div>
+        <div style="font-size:13px;font-weight:600;color:var(--blue)">↑ Tickets per engineer/day</div>
+      </div>
+    </div>
+
+    <div class="card" style="border-top:3px solid #9b59b6">
+      <div class="ai-badge" style="margin-bottom:12px">AI RECRUIT</div>
+      <div class="heading" style="font-size:18px;margin-bottom:8px">AI recruitment pipeline</div>
+      <div style="font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:16px">As SF-ICT scales the AI department, the recruitment system automatically screens CVs against technical requirements, generates interview questions, and scores candidates — reducing HR time by 70%.</div>
+      <div style="border-top:1px solid var(--border);padding-top:12px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">IMPACT</div>
+        <div style="font-size:13px;font-weight:600;color:var(--green)">↓ Time-to-hire by 60%</div>
+        <div style="font-size:13px;font-weight:600;color:var(--blue)">Better candidate quality</div>
+      </div>
+    </div>
+
+    <div class="card" style="border-top:3px solid var(--blue);grid-column:span 2">
+      <div class="ai-badge" style="margin-bottom:12px">PREDICTIVE</div>
+      <div class="heading" style="font-size:18px;margin-bottom:8px">Predictive failure detection — trained on 20 years of SF-ICT ticket data</div>
+      <div style="font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:12px">The ML model learns failure patterns from your historical ticket database. When endpoint telemetry matches a pre-failure signature, it triggers an automated RMM task before the client experiences downtime. True proactive MSP.</div>
+      <div style="display:flex;gap:16px">
+        <div class="card-sm" style="flex:1;text-align:center;background:var(--green-light)"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--green)">72h</div><div style="font-size:11px;color:var(--muted)">avg warning before failure</div></div>
+        <div class="card-sm" style="flex:1;text-align:center;background:var(--blue-light)"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--blue)">↓65%</div><div style="font-size:11px;color:var(--muted)">P1 incidents after deployment</div></div>
+        <div class="card-sm" style="flex:1;text-align:center;background:var(--amber-light)"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--amber)">MRR</div><div style="font-size:11px;color:var(--muted)">protected by preventing SLA breaches</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 4: PILLAR 2 — EXTERNAL ══ -->
+<div class="slide" id="s4">
+  <div class="tag tag-blue fade-1" style="width:fit-content">Pillar 2 — External AI services</div>
+  <h1 class="heading fade-2" style="font-size:36px;margin-top:12px;margin-bottom:20px">New revenue.<br>New services. <span style="color:var(--blue)">ZakelijkWerken 4.0.</span></h1>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1" class="fade-3">
+
+    <div class="card" style="background:var(--ink);color:white">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div class="tag" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.8)">HIGH VALUE</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:#4fa3e0">€2,500–€8,000</div>
+      </div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:8px">M365 Copilot Readiness Audit</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.6);line-height:1.6">Before selling a single Copilot license, SF-ICT runs a full SharePoint permissions audit. Without this, employees can ask Copilot "what is my colleague's salary?" and get the answer. The audit is mandatory. It is billable. Every client in the portfolio needs it.</div>
+      <div style="margin-top:12px;font-size:11px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,.3)">IMMEDIATE OPPORTUNITY — 30 CLIENTS = €75,000+</div>
+    </div>
+
+    <div class="card" style="border-color:var(--blue)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div class="tag tag-blue">RECURRING MRR</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--blue)">€35–€55/user/mo</div>
+      </div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:8px">Secure Private AI — Azure OpenAI</div>
+      <div style="font-size:12px;color:var(--ink2);line-height:1.6">Clients are using public ChatGPT with company data — GDPR violation. SF-ICT deploys a private, client-isolated AI instance using Azure OpenAI. Data stays in the Microsoft tenant. Sold as a monthly add-on to ZakelijkWerken. Fully recurring.</div>
+      <div style="margin-top:12px;font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted)">10 CLIENTS × 20 USERS = €7,000–€11,000 MRR</div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div class="tag tag-green">PROJECT BASED</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--green)">€5,000–€15,000</div>
+      </div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:8px">Business Process Automation</div>
+      <div style="font-size:12px;color:var(--ink2);line-height:1.6">Power Automate + AI Builder: invoice processing, HR onboarding, approval flows. SMBs currently do this manually. SF-ICT sells the automation as a project. Position it as: "We stop selling IT support, we start selling business efficiency."</div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div class="tag tag-amber">NEW SEGMENT</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--amber)">vCIO-level</div>
+      </div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:8px">AI Strategy Consulting for SMBs</div>
+      <div style="font-size:12px;color:var(--ink2);line-height:1.6">Victor acts as fractional AI advisor for SF-ICT's key accounts — 3-year AI roadmap, technology selection, ROI projections, board presentations. This elevates SF-ICT from IT provider to strategic partner. Dramatically reduces churn.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ SLIDE 5: TICKET DATA ══ -->
+<div class="slide" id="s5">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;height:100%;align-items:center">
+    <div>
+      <div class="tag tag-amber fade-1" style="width:fit-content">The unfair advantage</div>
+      <h1 class="heading fade-2" style="font-size:44px;margin:16px 0 24px">20 years of<br>ticket data.<br><span style="color:var(--blue)">Your secret weapon.</span></h1>
+      <div style="font-size:15px;color:var(--ink2);line-height:1.7;margin-bottom:24px" class="fade-3">
+        Every MSP can buy AI tools. <strong>No other MSP has what SF-ICT has</strong> — two decades of real-world Dutch SMB IT failure data. This is the training corpus that makes your AI better than any off-the-shelf solution.
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px" class="fade-4">
+        <div class="impact-row">
+          <div class="impact-icon" style="background:var(--blue-light)">🗄</div>
+          <div><strong>Custom LLM fine-tuning</strong> on SF-ICT's resolution history — your AI knows how your engineers fix things, not how a generic model does.</div>
+        </div>
+        <div class="impact-row">
+          <div class="impact-icon" style="background:var(--green-light)">🔮</div>
+          <div><strong>Predictive models</strong> trained on real failure sequences — the model knows that "symptom A + symptom B = disk failure in 72h" because it has seen it 1,400 times.</div>
+        </div>
+        <div class="impact-row">
+          <div class="impact-icon" style="background:var(--amber-light)">⚡</div>
+          <div><strong>Automated resolution suggestions</strong> — when a new ticket arrives, AI finds the 5 most similar historical tickets and surfaces the exact resolution steps.</div>
+        </div>
+      </div>
+    </div>
+    <div class="fade-5">
+      <div class="card" style="margin-bottom:12px">
+        <div style="font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:16px">ESTIMATED DATA ASSET</div>
+        <div class="g2" style="gap:16px">
+          <div><div class="metric-num">500k+</div><div class="metric-label">Historical tickets</div></div>
+          <div><div class="metric-num" style="color:var(--green)">20</div><div class="metric-label">Years of patterns</div></div>
+          <div><div class="metric-num" style="color:var(--amber)">98%</div><div class="metric-label">Dutch SMB relevance</div></div>
+          <div><div class="metric-num" style="color:#9b59b6">∞</div><div class="metric-label">Competitive moat</div></div>
+        </div>
+      </div>
+      <div class="card" style="background:var(--ink)">
+        <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,.4);margin-bottom:12px">TICKET INTELLIGENCE — LIVE EXAMPLE</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="background:rgba(255,255,255,.05);border-radius:6px;padding:10px">
+            <div style="font-size:11px;color:rgba(255,255,255,.4);margin-bottom:4px">INCOMING TICKET</div>
+            <div style="font-size:13px;color:white">"Outlook keeps crashing after Windows update"</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.3);font-size:11px">↓ AI matches to 847 similar tickets</div>
+          <div style="background:rgba(79,163,224,.1);border:1px solid rgba(79,163,224,.3);border-radius:6px;padding:10px">
+            <div style="font-size:11px;color:#4fa3e0;margin-bottom:6px">AI RESOLUTION — 94% match confidence</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.8);line-height:1.5">Run: <span style="font-family:'JetBrains Mono',monospace;color:#4fa3e0">MSIEXEC /repair</span> for Office suite. If persists, clear OST cache at %appdata%\Microsoft\Outlook. Resolution time: avg 8 min.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 6: LIVE DEMO DASHBOARD ══ -->
+<div class="slide" id="s6">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <div>
+      <div class="tag tag-ink" style="margin-bottom:6px">Live demo</div>
+      <h2 class="heading" style="font-size:24px">SF-ICT AI Operations Dashboard</h2>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="live-dot"></div>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)">SIMULATED LIVE DATA</span>
+    </div>
+  </div>
+
+  <!-- Ticker -->
+  <div class="ticker-wrap" style="margin-bottom:14px">
+    <div class="ticker" id="ticker">
+      <span class="ticker-item">NEW TICKET — <span>P2 · Network outage · Bakkerij de Wit</span></span>
+      <span class="ticker-item">AI RESOLVED — <span>Password reset · Loodgietersbedrijf Smit · 0 min human time</span></span>
+      <span class="ticker-item">PREDICTION — <span>Disk health warning · Tandartspraktijk Vos · action in 48h</span></span>
+      <span class="ticker-item">COPILOT AUDIT — <span>Accountantskantoor Peters · 127 permission issues found</span></span>
+      <span class="ticker-item">NEW TICKET — <span>P3 · Printer offline · Fysiotherapie Noord</span></span>
+      <span class="ticker-item">AI RESOLVED — <span>Outlook crash loop · SteuerBerater GmbH · RMM script deployed</span></span>
+      <span class="ticker-item">NEW TICKET — <span>P2 · Network outage · Bakkerij de Wit</span></span>
+      <span class="ticker-item">AI RESOLVED — <span>Password reset · Loodgietersbedrijf Smit · 0 min human time</span></span>
+      <span class="ticker-item">PREDICTION — <span>Disk health warning · Tandartspraktijk Vos · action in 48h</span></span>
+      <span class="ticker-item">COPILOT AUDIT — <span>Accountantskantoor Peters · 127 permission issues found</span></span>
+    </div>
+  </div>
+
+  <!-- Metrics row -->
+  <div class="g4" style="margin-bottom:14px">
+    <div class="card-sm" style="text-align:center">
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--blue)" id="demo-tickets">0</div>
+      <div style="font-size:11px;color:var(--muted)">Tickets today</div>
+      <div style="font-size:11px;color:var(--green);margin-top:2px" id="demo-auto">0% auto-resolved</div>
+    </div>
+    <div class="card-sm" style="text-align:center">
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--green)" id="demo-fcr">0%</div>
+      <div style="font-size:11px;color:var(--muted)">FCR rate</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px">Target: 85%</div>
+    </div>
+    <div class="card-sm" style="text-align:center">
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--amber)" id="demo-time">0m</div>
+      <div style="font-size:11px;color:var(--muted)">Avg resolution</div>
+      <div style="font-size:11px;color:var(--green);margin-top:2px">↓ vs 47m before</div>
+    </div>
+    <div class="card-sm" style="text-align:center">
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#9b59b6" id="demo-saved">€0</div>
+      <div style="font-size:11px;color:var(--muted)">Engineer time saved</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px">this week</div>
+    </div>
+  </div>
+
+  <!-- Main demo area -->
+  <div class="g2" style="flex:1">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted);margin-bottom:2px">INCOMING TICKET QUEUE — AI PROCESSING</div>
+      <div id="ticket-queue" style="display:flex;flex-direction:column;gap:8px;overflow-y:auto;flex:1"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted);margin-bottom:2px">PREDICTIVE ALERTS — ENDPOINT HEALTH</div>
+      <div id="predictions" style="display:flex;flex-direction:column;gap:8px;overflow-y:auto;flex:1">
+        <div class="ticket-card" style="border-left:3px solid var(--red)">
+          <div class="ticket-priority"><span class="tag" style="background:#fde8e8;color:var(--red);font-size:9px">CRITICAL — 12h</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;font-family:'JetBrains Mono',monospace">DISK · ENDPOINT EP-0847</div>
+          <div style="font-size:13px;font-weight:500">Bakkerij De Wit — Workstation 3</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">SMART health: 94% degraded. 1,847 reallocated sectors. Historical match: 97% failure within 24h.</div>
+          <div style="margin-top:8px"><span class="ai-badge">RMM backup triggered automatically</span></div>
+        </div>
+        <div class="ticket-card" style="border-left:3px solid var(--amber)">
+          <div class="ticket-priority"><span class="tag" style="background:var(--amber-light);color:var(--amber);font-size:9px">WARNING — 48h</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;font-family:'JetBrains Mono',monospace">MEMORY · ENDPOINT EP-1203</div>
+          <div style="font-size:13px;font-weight:500">Tandartspraktijk Vos — Server 1</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">RAM utilization 94% avg last 7 days. Pattern matches pre-crash sequence seen 34 times in ticket history.</div>
+          <div style="margin-top:8px"><span class="ai-badge">Maintenance window scheduled</span></div>
+        </div>
+        <div class="ticket-card" style="border-left:3px solid var(--blue)">
+          <div class="ticket-priority"><span class="tag tag-blue" style="font-size:9px">INFO — 7d</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;font-family:'JetBrains Mono',monospace">LICENSE · TENANT ACC-0441</div>
+          <div style="font-size:13px;font-weight:500">Accountantskantoor Peters — M365</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">3 unused licenses detected. Copilot readiness audit recommended. SharePoint permissions: 127 issues found.</div>
+          <div style="margin-top:8px"><span class="ai-badge">Audit proposal auto-drafted</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 7: ROADMAP + CONTRACT ══ -->
+<div class="slide" id="s7">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;height:100%">
+    <div>
+      <div class="tag tag-ink fade-1" style="width:fit-content">90-day execution plan</div>
+      <h2 class="heading fade-2" style="font-size:32px;margin:16px 0 24px">What I deliver.<br>Day by day.</h2>
+      <div class="timeline fade-3">
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot" style="background:var(--blue)"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <div class="roadmap-phase" style="border-color:var(--blue)">
+              <div class="roadmap-label">Days 1–30 — Internal audit</div>
+              <div class="roadmap-sub">Foundation and quick wins</div>
+              <div class="roadmap-items">
+                <div class="roadmap-item">Analyse PSA data — identify top 5 most time-consuming ticket types</div>
+                <div class="roadmap-item">Deploy AI triage for top 2 ticket categories</div>
+                <div class="roadmap-item">Establish secure AI guidelines and GDPR compliance framework</div>
+                <div class="roadmap-item">Assess current engineer AI usage and training gaps</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot" style="background:var(--green)"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <div class="roadmap-phase" style="border-color:var(--green)">
+              <div class="roadmap-label">Days 31–60 — Productising</div>
+              <div class="roadmap-sub">ZakelijkWerken 4.0 launched</div>
+              <div class="roadmap-items">
+                <div class="roadmap-item">Package Copilot Readiness Audit into portfolio offering</div>
+                <div class="roadmap-item">Build first Private Azure OpenAI deployment for pilot client</div>
+                <div class="roadmap-item">Train 1st-line team on AI-assisted resolution workflow</div>
+                <div class="roadmap-item">Launch AI recruitment pipeline for department growth</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot" style="background:var(--amber)"></div></div>
+          <div class="tl-content">
+            <div class="roadmap-phase" style="border-color:var(--amber)">
+              <div class="roadmap-label">Days 61–90 — Client rollout</div>
+              <div class="roadmap-sub">Revenue generating</div>
+              <div class="roadmap-items">
+                <div class="roadmap-item">Deploy with 3 beta clients — generate case studies</div>
+                <div class="roadmap-item">Predictive ML model live on RMM telemetry</div>
+                <div class="roadmap-item">Full sales team briefing on AI portfolio</div>
+                <div class="roadmap-item">MRR report: new AI revenue vs pre-AI baseline</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fade-4">
+      <div class="tag tag-blue" style="width:fit-content;margin-bottom:16px">Contract options</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+
+        <div class="contract-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div>
+              <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px">ZZP / Freelance</div>
+              <div style="font-size:12px;color:var(--muted)">Project-based engagement</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--blue)">€85–€110</div>
+              <div style="font-size:11px;color:var(--muted)">per hour / ZZP rate</div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--ink2);line-height:1.5">Minimum 3-day per week commitment. Full autonomy. Invoice monthly. Exit with 30-day notice. Ideal if SF-ICT wants to test before committing.</div>
+        </div>
+
+        <div class="contract-card featured">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div>
+              <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--blue)">12-Month Employee Contract</div>
+              <div style="font-size:12px;color:var(--muted)">Head of AI — full department lead</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--blue)">€4,200–€5,500</div>
+              <div style="font-size:11px;color:var(--muted)">gross per month + bonus</div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--ink2);line-height:1.5;margin-bottom:12px">Full-time department head. Build the team from scratch. Revenue share on AI services sold. Performance bonus tied to MRR growth from AI portfolio.</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span class="tag tag-blue" style="font-size:10px">Department budget control</span>
+            <span class="tag tag-green" style="font-size:10px">Revenue share</span>
+            <span class="tag tag-amber" style="font-size:10px">Build the team</span>
+          </div>
+        </div>
+
+        <div class="contract-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div>
+              <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px">Hybrid — Employee + Polypus Intel</div>
+              <div style="font-size:12px;color:var(--muted)">Part-time + AI consultancy</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--green)">€2,800–€3,500</div>
+              <div style="font-size:11px;color:var(--muted)">part-time + retained</div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--ink2);line-height:1.5">3 days/week for SF-ICT. 2 days for Polypus Intelligence. Best of both worlds — SF-ICT gets dedicated AI leadership, Victor retains entrepreneurial track.</div>
+        </div>
+
+        <div style="padding:16px;background:var(--surface);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:12px;color:var(--ink2);line-height:1.6"><strong>My recommendation:</strong> Start with the 12-month contract. SF-ICT gains a full AI department head who is invested in growing the business. The revenue share aligns incentives — I only make more if SF-ICT makes more. This is not a cost center. It is a revenue generator.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 8: CLOSE ══ -->
+<div class="slide" id="s8">
+  <div style="display:flex;align-items:center;justify-content:center;flex:1;flex-direction:column;gap:32px">
+    <div style="text-align:center">
+      <div class="tag tag-ink" style="margin-bottom:20px">The decision</div>
+      <h1 class="display" style="font-size:64px;line-height:.92;margin-bottom:24px">SF-ICT becomes<br>the <span style="color:var(--blue)">AI-first MSP</span><br>of Noord-Brabant.</h1>
+      <p style="font-size:18px;color:var(--muted);max-width:560px;margin:0 auto;line-height:1.6">Every client in your portfolio needs an AI strategy. You can be the MSP that delivers it — or watch a competitor take that relationship.</p>
+    </div>
+    <div class="g3" style="max-width:700px;width:100%">
+      <div class="card" style="text-align:center">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--green)">€200k+</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">New MRR potential year one</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--blue)">↓40%</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Ticket handling cost</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--amber)">90</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Days to first client results</div>
+      </div>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)">
+      Victor Citroen — victor@polypusintelligence.ch — Zürich / Available Netherlands
+    </div>
+  </div>
+</div>
+
+</div><!-- end deck -->
+
+<!-- NAV BAR -->
+<div class="nav" id="nav-bar">
+  <button class="nav-btn" onclick="prev()">←</button>
+  <div id="nav-dots" style="display:flex;gap:6px"></div>
+  <button class="nav-btn" onclick="next()">→</button>
+  <span class="slide-num" id="slide-num">01 / 09</span>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+let current = 0;
+
+// Build nav dots
+const dotsEl = document.getElementById('nav-dots');
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'nav-dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+});
+
+function goTo(n) {
+  slides[current].classList.remove('active');
+  dotsEl.children[current].classList.remove('active');
+  current = Math.max(0, Math.min(n, total - 1));
+  slides[current].classList.add('active');
+  dotsEl.children[current].classList.add('active');
+  document.getElementById('slide-num').textContent =
+    String(current + 1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+
+  // Start demo if on slide 6
+  if (current === 6) startDemo();
+}
+
+function next() { goTo(current + 1); }
+function prev() { goTo(current - 1); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); next(); }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prev(); }
+});
+
+// ── LIVE DEMO ENGINE ──────────────────────────────────────────
+const TICKETS = [
+  { client: 'Bakkerij De Wit', issue: 'Outlook niet te openen', priority: 'P3', cat: 'M365', ai_cat: 'Email / M365', resolution: 'OST cache clear via RMM', confidence: 94, mins: 0, auto: true },
+  { client: 'Tandartspraktijk Vos', issue: 'Wachtwoord vergeten', priority: 'P4', cat: 'Account', ai_cat: 'Password Reset', resolution: 'Self-service reset portal link sent', confidence: 99, mins: 0, auto: true },
+  { client: 'Loodgietersbedrijf Smit', issue: 'Printer werkt niet', priority: 'P3', cat: 'Hardware', ai_cat: 'Printer / Peripheral', resolution: 'Driver reinstall via RMM', confidence: 87, mins: 4, auto: false },
+  { client: 'Fysiotherapie Noord', issue: 'VPN verbinding verbroken', priority: 'P2', cat: 'Network', ai_cat: 'VPN / Connectivity', resolution: 'FortiClient config push via Intune', confidence: 91, mins: 0, auto: true },
+  { client: 'Accountantskantoor Peters', issue: 'Teams video werkt niet', priority: 'P3', cat: 'M365', ai_cat: 'Teams / AV', resolution: 'Camera driver update via RMM', confidence: 82, mins: 7, auto: false },
+  { client: 'Restaurant Bregje', issue: 'Nieuwe medewerker aanmaken', priority: 'P4', cat: 'Onboarding', ai_cat: 'User Provisioning', resolution: 'M365 account + Intune enrollment automated', confidence: 98, mins: 0, auto: true },
+  { client: 'Kapsalon Stijl', issue: 'Geen internet op werkplek', priority: 'P2', cat: 'Network', ai_cat: 'Network / DHCP', resolution: 'IP conflict detected — DHCP reservation created', confidence: 89, mins: 3, auto: false },
+];
+
+let demoInterval = null;
+let demoStats = { tickets: 0, autoResolved: 0, totalTime: 0, saved: 0 };
+let ticketQueue = [];
+
+function startDemo() {
+  if (demoInterval) return;
+  demoStats = { tickets: 0, autoResolved: 0, totalTime: 0, saved: 0 };
+  ticketQueue = [];
+  document.getElementById('ticket-queue').innerHTML = '';
+
+  let idx = 0;
+  demoInterval = setInterval(() => {
+    const t = TICKETS[idx % TICKETS.length];
+    idx++;
+    addTicket(t);
+    demoStats.tickets++;
+    if (t.auto) { demoStats.autoResolved++; demoStats.saved += 35; }
+    demoStats.totalTime = t.auto ? demoStats.totalTime : demoStats.totalTime + t.mins;
+
+    const fcr = Math.round((demoStats.autoResolved / demoStats.tickets) * 100);
+    const avgTime = demoStats.tickets > 0 ? Math.round(demoStats.totalTime / Math.max(1, demoStats.tickets - demoStats.autoResolved)) : 0;
+
+    document.getElementById('demo-tickets').textContent = demoStats.tickets;
+    document.getElementById('demo-auto').textContent = Math.round((demoStats.autoResolved / demoStats.tickets) * 100) + '% auto-resolved';
+    document.getElementById('demo-fcr').textContent = fcr + '%';
+    document.getElementById('demo-time').textContent = (avgTime || 12) + 'm';
+    document.getElementById('demo-saved').textContent = '€' + demoStats.saved.toLocaleString();
+  }, 2200);
+}
+
+function addTicket(t) {
+  const queue = document.getElementById('ticket-queue');
+  const el = document.createElement('div');
+  el.className = 'ticket-card';
+  const pColors = { P1: 'var(--red)', P2: 'var(--amber)', P3: 'var(--blue)', P4: 'var(--muted)' };
+  el.innerHTML = `
+    <div class="ticket-priority"><span class="tag" style="background:${pColors[t.priority]}22;color:${pColors[t.priority]};font-size:9px">${t.priority} · ${t.cat}</span></div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:3px;font-family:'JetBrains Mono',monospace">${t.client}</div>
+    <div style="font-size:13px;font-weight:500;margin-bottom:6px">${t.issue}</div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span class="ai-badge" style="font-size:9px">AI: ${t.ai_cat} · ${t.confidence}%</span>
+      ${t.auto
+        ? `<span class="tag tag-green" style="font-size:9px">AUTO-RESOLVED</span>`
+        : `<span class="tag tag-amber" style="font-size:9px">→ 2nd line · est. ${t.mins}m</span>`
+      }
+    </div>
+    ${t.auto ? `<div style="font-size:11px;color:var(--muted);margin-top:6px">${t.resolution}</div>` : ''}
+  `;
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(-8px)';
+  el.style.transition = 'all .3s ease';
+  queue.insertBefore(el, queue.firstChild);
+  requestAnimationFrame(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; });
+  while (queue.children.length > 4) queue.removeChild(queue.lastChild);
+}
+
+// Stop demo when leaving slide
+const observer = new MutationObserver(() => {
+  if (!slides[6].classList.contains('active') && demoInterval) {
+    clearInterval(demoInterval);
+    demoInterval = null;
+  }
+});
+observer.observe(slides[6], { attributes: true });
+</script>
+</body>
+</html>
