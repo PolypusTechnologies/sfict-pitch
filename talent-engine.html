@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SF-ICT Talent Engine — AI-Powered Recruitment Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --dark: #232430;
+    --dark-2: #2A2B38;
+    --blue: #1BA2D2;
+    --deep-blue: #0477AE;
+    --pink: #E4067D;
+    --purple: #766A86;
+    --light-bg: #EAF2FB;
+    --paper: #FAFAF7;
+    --teal: #649AA2;
+    --text: #1A1A1A;
+    --text-soft: #4A4A4A;
+    --text-muted: #8A8A88;
+    --hairline: #D4D2CB;
+    --gold: #B8956A;
+    --success: #2D8B60;
+    --warn: #D4A017;
+    --danger: #C0392B;
+  }
+
+  html, body {
+    font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text);
+    background: var(--paper);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ============ HERO ============ */
+  .hero {
+    background: linear-gradient(135deg, var(--dark) 0%, var(--dark-2) 50%, var(--deep-blue) 100%);
+    color: #fff;
+    padding: 80px 48px 100px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(27, 162, 210, 0.25) 0%, transparent 50%),
+      radial-gradient(circle at 85% 80%, rgba(228, 6, 125, 0.2) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 70px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+
+  .logo-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--blue), var(--pink));
+    display: grid;
+    place-items: center;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 20px;
+  }
+
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .logo-text small {
+    font-size: 11px;
+    font-weight: 400;
+    opacity: 0.7;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .nav-right {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--blue);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+
+  .hero-tag .dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--blue);
+    border-radius: 50%;
+    margin-right: 10px;
+    vertical-align: middle;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.3); }
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 6vw, 84px);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    max-width: 14ch;
+  }
+
+  .hero h1 .accent {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--blue), var(--pink));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero-sub {
+    font-size: 20px;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 52ch;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  .hero-sub b { font-weight: 500; color: #fff; }
+
+  .hero-meta {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .meta-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .meta-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--blue);
+  }
+
+  .meta-val.pink { color: var(--pink); }
+
+  /* ============ CONCEPT STRIP ============ */
+  .concept {
+    background: var(--paper);
+    padding: 72px 48px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .concept-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .concept-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 16px;
+  }
+
+  .concept-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--dark);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .concept-title .italic { font-style: italic; color: var(--deep-blue); }
+
+  .concept-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  .pillar {
+    padding: 24px;
+    background: #fff;
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    position: relative;
+  }
+
+  .pillar-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--blue);
+    letter-spacing: 0.2em;
+    margin-bottom: 12px;
+  }
+
+  .pillar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .pillar-desc {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--text-soft);
+  }
+
+  /* ============ DASHBOARD ============ */
+  .dashboard-wrapper {
+    background: linear-gradient(180deg, var(--dark) 0%, #1a1b26 100%);
+    padding: 80px 48px;
+    position: relative;
+  }
+
+  .dashboard-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue), var(--pink), transparent);
+  }
+
+  .dashboard-header {
+    max-width: 1280px;
+    margin: 0 auto 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .dashboard-header .title-block h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+
+  .dashboard-header .title-block h2 .italic {
+    font-style: italic;
+    color: var(--blue);
+  }
+
+  .dashboard-header .sub {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: rgba(45, 139, 96, 0.2);
+    border: 1px solid rgba(45, 139, 96, 0.5);
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #5ed49b;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    background: #5ed49b;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  /* top metrics */
+  .dashboard {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .kpi {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kpi::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--blue);
+  }
+
+  .kpi.pink::before { background: var(--pink); }
+  .kpi.teal::before { background: var(--teal); }
+  .kpi.gold::before { background: var(--gold); }
+
+  .kpi-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 10px;
+  }
+
+  .kpi-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+
+  .kpi-delta {
+    font-size: 12px;
+    color: #5ed49b;
+    font-weight: 500;
+  }
+
+  .kpi-delta.neutral { color: rgba(255, 255, 255, 0.5); }
+  .kpi-delta.down { color: #ff6b6b; }
+
+  /* panel grid */
+  .panels {
+    max-width: 1280px;
+    margin: 20px auto 0;
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 20px;
+  }
+
+  .panel {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 24px;
+  }
+
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 12px;
+  }
+
+  .panel-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .panel-title .italic { font-style: italic; color: var(--blue); }
+
+  .panel-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* candidates table */
+  .candidates .row {
+    display: grid;
+    grid-template-columns: 2fr 1.3fr 1fr 0.8fr 0.8fr 1fr;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    align-items: center;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .candidates .row:last-child { border-bottom: none; }
+
+  .candidates .row.head {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 500;
+    padding-bottom: 8px;
+  }
+
+  .cand-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--pink));
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .cand-name .info { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
+  .cand-name .n { font-weight: 600; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cand-name .r { font-size: 11px; color: rgba(255, 255, 255, 0.5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .src {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    background: rgba(27, 162, 210, 0.15);
+    color: var(--blue);
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .src.git { background: rgba(118, 106, 134, 0.15); color: #a89bb8; }
+  .src.twk { background: rgba(228, 6, 125, 0.15); color: var(--pink); }
+  .src.oz { background: rgba(184, 149, 106, 0.15); color: var(--gold); }
+  .src.net { background: rgba(100, 154, 162, 0.15); color: #94c4cc; }
+
+  /* AI match score */
+  .match {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .match.hi { color: #5ed49b; }
+  .match.md { color: var(--gold); }
+  .match.lo { color: rgba(255, 255, 255, 0.5); }
+
+  /* status pill */
+  .status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+  .status.new { background: rgba(27, 162, 210, 0.2); color: var(--blue); }
+  .status.contact { background: rgba(212, 160, 23, 0.2); color: var(--gold); }
+  .status.reply { background: rgba(45, 139, 96, 0.2); color: #5ed49b; }
+  .status.meet { background: rgba(228, 6, 125, 0.2); color: var(--pink); }
+  .status.rev { background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.7); }
+
+  /* action btn */
+  .act {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 5px 10px;
+    background: rgba(27, 162, 210, 0.15);
+    color: var(--blue);
+    border: 1px solid rgba(27, 162, 210, 0.3);
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .act:hover { background: rgba(27, 162, 210, 0.25); }
+
+  /* sources breakdown */
+  .source-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .src-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .src-row-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .src-row-top b { color: #fff; }
+
+  .bar-track {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), var(--pink));
+    border-radius: 99px;
+    transition: width 1s ease-out;
+  }
+
+  .bar-fill.gh { background: linear-gradient(90deg, var(--purple), #a89bb8); }
+  .bar-fill.oz { background: linear-gradient(90deg, var(--gold), #e0c690); }
+  .bar-fill.twk { background: linear-gradient(90deg, var(--pink), #ff5ab0); }
+  .bar-fill.net { background: linear-gradient(90deg, var(--teal), #94c4cc); }
+
+  /* AI outreach preview */
+  .outreach-card {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .outreach-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .outreach-to { color: var(--blue); }
+
+  .outreach-body {
+    color: rgba(255, 255, 255, 0.82);
+    font-style: italic;
+    padding: 6px 10px;
+    border-left: 2px solid var(--blue);
+    font-size: 12.5px;
+  }
+
+  .outreach-body b { font-weight: 600; color: #fff; font-style: normal; }
+
+  .outreach-foot {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .mini-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: 1px solid;
+  }
+
+  .mini-btn.approve {
+    background: rgba(45, 139, 96, 0.2);
+    color: #5ed49b;
+    border-color: rgba(45, 139, 96, 0.4);
+  }
+
+  .mini-btn.edit {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.7);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  /* meetings pipeline */
+  .meetings {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .meet {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 2px solid var(--pink);
+    border-radius: 4px;
+    align-items: center;
+  }
+
+  .meet.blue { border-left-color: var(--blue); }
+  .meet.gold { border-left-color: var(--gold); }
+
+  .meet-time {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    text-align: center;
+    min-width: 60px;
+  }
+
+  .meet-time .d {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+  }
+
+  .meet-time .h {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--blue);
+  }
+
+  .meet-info { display: flex; flex-direction: column; line-height: 1.2; gap: 2px; }
+  .meet-info .p { font-weight: 600; color: #fff; font-size: 13px; }
+  .meet-info .r { font-size: 11px; color: rgba(255, 255, 255, 0.55); }
+
+  .meet-ico {
+    color: var(--pink);
+    font-size: 16px;
+  }
+
+  /* GDPR strip */
+  .gdpr-strip {
+    max-width: 1280px;
+    margin: 24px auto 0;
+    padding: 16px 24px;
+    background: rgba(45, 139, 96, 0.08);
+    border: 1px solid rgba(45, 139, 96, 0.3);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .gdpr-ico {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(45, 139, 96, 0.2);
+    display: grid;
+    place-items: center;
+    color: #5ed49b;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .gdpr-strip b { color: #5ed49b; font-weight: 600; }
+
+  /* ============ AI NOTE SECTION ============ */
+  .ai-note-section {
+    max-width: 1280px;
+    margin: 20px auto 0;
+  }
+
+  .ai-note {
+    background: rgba(228, 6, 125, 0.06);
+    border: 1px solid rgba(228, 6, 125, 0.25);
+    border-radius: 10px;
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .ai-note-ico {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--pink), var(--blue));
+    display: grid;
+    place-items: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .ai-note-content {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .ai-note-content .label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  .ai-note-content i { font-style: italic; color: rgba(255, 255, 255, 0.65); }
+
+  /* ============ ROADMAP ============ */
+  .roadmap {
+    background: var(--paper);
+    padding: 80px 48px;
+  }
+
+  .roadmap-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .roadmap h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  .roadmap h2 .italic { font-style: italic; color: var(--deep-blue); }
+
+  .roadmap .sub {
+    font-size: 16px;
+    color: var(--text-soft);
+    max-width: 64ch;
+    margin-bottom: 48px;
+  }
+
+  .phases {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .phase {
+    background: #fff;
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .phase::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--blue);
+  }
+
+  .phase.p2::before { background: var(--pink); }
+  .phase.p3::before { background: var(--gold); }
+
+  .phase-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 8px;
+  }
+
+  .phase.p2 .phase-label { color: var(--pink); }
+  .phase.p3 .phase-label { color: var(--gold); }
+
+  .phase-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 8px;
+    line-height: 1.15;
+  }
+
+  .phase-dates {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .phase-list {
+    list-style: none;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--text-soft);
+  }
+
+  .phase-list li {
+    padding-left: 14px;
+    margin-bottom: 6px;
+    position: relative;
+  }
+
+  .phase-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--blue);
+  }
+
+  .phase.p2 .phase-list li::before { color: var(--pink); }
+  .phase.p3 .phase-list li::before { color: var(--gold); }
+
+  /* ============ FOOTER ============ */
+  footer {
+    background: var(--dark);
+    color: rgba(255, 255, 255, 0.6);
+    padding: 40px 48px;
+    text-align: center;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  footer b { color: var(--blue); font-weight: 500; }
+
+  @media (max-width: 980px) {
+    .hero { padding: 48px 24px 72px; }
+    .concept, .dashboard-wrapper, .roadmap { padding: 48px 24px; }
+    .concept-inner { grid-template-columns: 1fr; gap: 24px; }
+    .concept-grid, .phases { grid-template-columns: 1fr; }
+    .dashboard { grid-template-columns: repeat(2, 1fr); }
+    .panels { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-top">
+      <div class="logo">
+        <div class="logo-mark">SF</div>
+        <div class="logo-text">
+          <span>SF-ICT <i style="color:var(--blue);font-weight:400;">Talent Engine</i></span>
+          <small>AI Recruitment Intelligence</small>
+        </div>
+      </div>
+      <div class="nav-right">Concept Demo · v0.1 · April 2026</div>
+    </div>
+
+    <div class="hero-tag"><span class="dot"></span>Phase 1 — Recruitment Intelligence · Foundation for SAGE</div>
+
+    <h1>Find the right engineers <span class="accent">before your competitors do.</span></h1>
+
+    <p class="hero-sub">
+      An <b>AI-assisted recruitment intelligence system</b> purpose-built for SF-ICT.
+      Source from Dutch-specialist platforms, score candidates against your real job requirements,
+      draft personalised outreach — all <b>GDPR-compliant, human-approved, and fully auditable.</b>
+      Same AI foundation that will power SAGE. Faster to deploy. Immediate ROI.
+    </p>
+
+    <div class="hero-meta">
+      <div class="meta-item">
+        <span class="meta-label">Time to MVP</span>
+        <span class="meta-val">6 weeks</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Sources integrated</span>
+        <span class="meta-val">9+</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Build investment</span>
+        <span class="meta-val pink">€18,400</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Monthly running</span>
+        <span class="meta-val">€1,200</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONCEPT ============ -->
+<section class="concept">
+  <div class="concept-inner">
+    <div>
+      <div class="concept-label">How it works</div>
+      <h2 class="concept-title">Three pillars.<br><span class="italic">Built for the Dutch market.</span></h2>
+    </div>
+    <div class="concept-grid">
+      <div class="pillar">
+        <div class="pillar-num">01 / SOURCE</div>
+        <div class="pillar-title">Multi-channel discovery</div>
+        <div class="pillar-desc">AI monitors Tweakers, ICTerGezocht, OfferZen, LinkedIn, GitHub, Magnet.me, Nationale Vacaturebank and Intermediair — surfacing qualified candidates daily. No scraping. Only legitimate API &amp; RSS sources or inbound applications.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02 / MATCH</div>
+        <div class="pillar-title">AI scoring + written rationale</div>
+        <div class="pillar-desc">Each candidate scored against SF-ICT's real job requirements with a written AI note explaining <i>why</i> — skills, experience, Dutch-language fit, location, availability signals. You see the reasoning, not a black box.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03 / ENGAGE</div>
+        <div class="pillar-title">Human-approved outreach</div>
+        <div class="pillar-desc">AI drafts hyper-personalised messages referencing the candidate's actual background. You or Victor approve every message before it sends. Zero spam. GDPR-legal. Scheduling handled through your existing calendar.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DASHBOARD ============ -->
+<section class="dashboard-wrapper">
+  <div class="dashboard-header">
+    <div class="title-block">
+      <h2>Operator <span class="italic">Console</span></h2>
+      <div class="sub">Live recruitment pipeline — Mon 20 Apr 2026, 11:24 CET</div>
+    </div>
+    <div class="live-badge"><span class="live-dot"></span>System Live</div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="dashboard">
+    <div class="kpi">
+      <div class="kpi-label">Active Candidates</div>
+      <div class="kpi-val">147</div>
+      <div class="kpi-delta">↑ 23 this week</div>
+    </div>
+    <div class="kpi pink">
+      <div class="kpi-label">Interviews Scheduled</div>
+      <div class="kpi-val">12</div>
+      <div class="kpi-delta">↑ 4 this week</div>
+    </div>
+    <div class="kpi teal">
+      <div class="kpi-label">Avg Time to Shortlist</div>
+      <div class="kpi-val">4.2h</div>
+      <div class="kpi-delta">↓ 94% vs manual</div>
+    </div>
+    <div class="kpi gold">
+      <div class="kpi-label">AI Match Score (avg)</div>
+      <div class="kpi-val">78%</div>
+      <div class="kpi-delta neutral">target: &gt;70%</div>
+    </div>
+  </div>
+
+  <!-- Main panels -->
+  <div class="panels">
+
+    <!-- Candidates pipeline -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Recent <span class="italic">Candidates</span></div>
+        <div class="panel-meta">AI-sourced · last 24h</div>
+      </div>
+      <div class="candidates">
+        <div class="row head">
+          <div>Candidate</div>
+          <div>Role Interest</div>
+          <div>Source</div>
+          <div>Match</div>
+          <div>Status</div>
+          <div>Action</div>
+        </div>
+
+        <div class="row">
+          <div class="cand-name">
+            <div class="avatar">ML</div>
+            <div class="info"><span class="n">Maarten L.</span><span class="r">Senior DevOps · Eindhoven</span></div>
+          </div>
+          <div>DevOps Engineer</div>
+          <div><span class="src twk">Tweakers</span></div>
+          <div class="match hi">94%</div>
+          <div><span class="status new">New</span></div>
+          <div><button class="act">Review</button></div>
+        </div>
+
+        <div class="row">
+          <div class="cand-name">
+            <div class="avatar">SK</div>
+            <div class="info"><span class="n">Sanne K.</span><span class="r">M365 Architect · Utrecht</span></div>
+          </div>
+          <div>M365 Specialist</div>
+          <div><span class="src">LinkedIn</span></div>
+          <div class="match hi">91%</div>
+          <div><span class="status contact">Contacted</span></div>
+          <div><button class="act">View thread</button></div>
+        </div>
+
+        <div class="row">
+          <div class="cand-name">
+            <div class="avatar">JV</div>
+            <div class="info"><span class="n">Joost V.</span><span class="r">Network Eng · Den Bosch</span></div>
+          </div>
+          <div>Network Engineer</div>
+          <div><span class="src net">ICTerGez.</span></div>
+          <div class="match hi">88%</div>
+          <div><span class="status reply">Replied</span></div>
+          <div><button class="act">Schedule call</button></div>
+        </div>
+
+        <div class="row">
+          <div class="cand-name">
+            <div class="avatar">BJ</div>
+            <div class="info"><span class="n">Bas J.</span><span class="r">Security Eng · Amsterdam</span></div>
+          </div>
+          <div>SOC / Security</div>
+          <div><span class="src git">GitHub</span></div>
+          <div class="match hi">86%</div>
+          <div><span class="status meet">Meeting Thu</span></div>
+          <div><button class="act">Prep notes</button></div>
+        </div>
+
+        <div class="row">
+          <div class="cand-name">
+            <div class="avatar">FH</div>
+            <div class="info"><span class="n">Femke H.</span><span class="r">Service Desk Lead · Tilburg</span></div>
+          </div>
+          <div>Team Lead · Support</div>
+          <div><span class="src oz">OfferZen</span></div>
+          <div class="match md">74%</div>
+          <div><span class="status rev">Reviewing</span></div>
+          <div><button class="act">Review</button></div>
+        </div>
+
+        <div class="row">
+          <div class="cand-name">
+            <div class="avatar">TK</div>
+            <div class="info"><span class="n">Thijs K.</span><span class="r">Cloud Architect · Breda</span></div>
+          </div>
+          <div>Azure Architect</div>
+          <div><span class="src twk">Tweakers</span></div>
+          <div class="match hi">82%</div>
+          <div><span class="status new">New</span></div>
+          <div><button class="act">Review</button></div>
+        </div>
+
+        <div class="row">
+          <div class="cand-name">
+            <div class="avatar">KR</div>
+            <div class="info"><span class="n">Koen R.</span><span class="r">Full-stack · Eindhoven</span></div>
+          </div>
+          <div>Internal tooling dev</div>
+          <div><span class="src net">Magnet.me</span></div>
+          <div class="match md">71%</div>
+          <div><span class="status contact">Contacted</span></div>
+          <div><button class="act">View thread</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column stacked -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+
+      <!-- Sources -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">Candidates <span class="italic">by Source</span></div>
+          <div class="panel-meta">this month</div>
+        </div>
+        <div class="source-bar">
+          <div class="src-row">
+            <div class="src-row-top"><span>Tweakers.net</span><b>42</b></div>
+            <div class="bar-track"><div class="bar-fill twk" style="width: 72%;"></div></div>
+          </div>
+          <div class="src-row">
+            <div class="src-row-top"><span>LinkedIn Recruiter</span><b>34</b></div>
+            <div class="bar-track"><div class="bar-fill" style="width: 58%;"></div></div>
+          </div>
+          <div class="src-row">
+            <div class="src-row-top"><span>ICTerGezocht.nl</span><b>28</b></div>
+            <div class="bar-track"><div class="bar-fill net" style="width: 48%;"></div></div>
+          </div>
+          <div class="src-row">
+            <div class="src-row-top"><span>GitHub</span><b>19</b></div>
+            <div class="bar-track"><div class="bar-fill gh" style="width: 33%;"></div></div>
+          </div>
+          <div class="src-row">
+            <div class="src-row-top"><span>OfferZen</span><b>14</b></div>
+            <div class="bar-track"><div class="bar-fill oz" style="width: 24%;"></div></div>
+          </div>
+          <div class="src-row">
+            <div class="src-row-top"><span>Magnet.me + others</span><b>10</b></div>
+            <div class="bar-track"><div class="bar-fill" style="width: 17%;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming meetings -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">Upcoming <span class="italic">Meetings</span></div>
+          <div class="panel-meta">next 7 days</div>
+        </div>
+        <div class="meetings">
+          <div class="meet blue">
+            <div class="meet-time"><span class="d">Tue 21</span><span class="h">10:00</span></div>
+            <div class="meet-info"><span class="p">Maarten L.</span><span class="r">DevOps intro · 30 min · Video</span></div>
+            <div class="meet-ico">→</div>
+          </div>
+          <div class="meet">
+            <div class="meet-time"><span class="d">Wed 22</span><span class="h">14:30</span></div>
+            <div class="meet-info"><span class="p">Sanne K.</span><span class="r">M365 Architect screening · 45 min</span></div>
+            <div class="meet-ico">→</div>
+          </div>
+          <div class="meet gold">
+            <div class="meet-time"><span class="d">Thu 23</span><span class="h">11:00</span></div>
+            <div class="meet-info"><span class="p">Bas J.</span><span class="r">Security final · On-site Den Dungen</span></div>
+            <div class="meet-ico">→</div>
+          </div>
+          <div class="meet blue">
+            <div class="meet-time"><span class="d">Fri 24</span><span class="h">09:30</span></div>
+            <div class="meet-info"><span class="p">Joost V.</span><span class="r">Network intro · 30 min · Video</span></div>
+            <div class="meet-ico">→</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Note (CRM-style justification) -->
+  <div class="ai-note-section">
+    <div class="ai-note">
+      <div class="ai-note-ico">✦</div>
+      <div class="ai-note-content">
+        <span class="label">AI Rationale — why Maarten L. (94% match)</span>
+        <i>7 years DevOps at mid-size Dutch MSP (ComCave) &middot; Kubernetes / Terraform / Azure expertise listed in SF-ICT stack &middot; Native Dutch speaker based Eindhoven (40 min to Den Dungen) &middot; Posted on Tweakers 3 weeks ago about "looking for something new" &middot; Public GitHub shows active Azure automation work &middot; Strong Dutch SMB background &mdash; culture fit high.</i>
+      </div>
+      <button class="act">Open full profile</button>
+    </div>
+  </div>
+
+  <!-- AI outreach panel -->
+  <div class="panels" style="margin-top: 20px; grid-template-columns: 1fr;">
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">AI-Drafted <span class="italic">Outreach</span> — awaiting approval</div>
+        <div class="panel-meta">drafted · never sent without review</div>
+      </div>
+
+      <div class="outreach-card">
+        <div class="outreach-head">
+          <span>To: <span class="outreach-to">Maarten L. &middot; maarten.l@[provider]</span></span>
+          <span>Subject: DevOps rol bij SF-ICT — ik zag je Tweakers-post</span>
+        </div>
+        <div class="outreach-body">
+          Hoi Maarten, <b>ik zag je reactie op Tweakers over een nieuwe uitdaging zoeken.</b> Bij <b>SF-ICT in Den Dungen</b> zoeken we momenteel een ervaren DevOps engineer voor ons Azure-platform. Je ervaring bij ComCave met Kubernetes en Terraform past precies. Kort gesprek deze week? Ik blokkeer 30 minuten — woensdag 11:00 of donderdag 14:00?
+        </div>
+        <div class="outreach-foot">
+          <button class="mini-btn approve">✓ Approve &amp; send</button>
+          <button class="mini-btn edit">Edit draft</button>
+          <button class="mini-btn edit">Regenerate</button>
+        </div>
+      </div>
+
+      <div class="outreach-card">
+        <div class="outreach-head">
+          <span>To: <span class="outreach-to">Sanne K. &middot; via LinkedIn InMail</span></span>
+          <span>Subject: M365 Architect — SF-ICT</span>
+        </div>
+        <div class="outreach-body">
+          Hi Sanne, your M365 architecture work at [current employer] &mdash; particularly the multi-tenant migration write-up you shared last month &mdash; is exactly what we're building toward at <b>SF-ICT</b>. We manage ~40 mid-size Dutch SMB M365 tenants and are looking for an architect to lead the practice. Coffee in Utrecht next week?
+        </div>
+        <div class="outreach-foot">
+          <button class="mini-btn approve">✓ Approve &amp; send</button>
+          <button class="mini-btn edit">Edit draft</button>
+          <button class="mini-btn edit">Regenerate</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GDPR strip -->
+  <div class="gdpr-strip">
+    <div class="gdpr-ico">✓</div>
+    <div>
+      <b>GDPR &amp; Dutch AVG Compliance</b> — All candidate data stored in EU region (Azure NL).
+      No LinkedIn scraping. Only public profiles &amp; opt-in sources. Every outreach message logged with Article 6(1)(f) legitimate-interest justification. Candidate data deleted automatically 90 days after last interaction unless explicit consent given.
+    </div>
+  </div>
+
+</section>
+
+<!-- ============ ROADMAP ============ -->
+<section class="roadmap">
+  <div class="roadmap-inner">
+    <h2>A <span class="italic">phased</span> approach.</h2>
+    <p class="sub">The Talent Engine ships in three phases. Each phase delivers value on its own — and lays the technical foundation for SAGE, so nothing is wasted.</p>
+
+    <div class="phases">
+      <div class="phase">
+        <div class="phase-label">Phase 1 · MVP</div>
+        <div class="phase-title">Foundation &amp; First Sources</div>
+        <div class="phase-dates">Weeks 1–6</div>
+        <ul class="phase-list">
+          <li>Integrate LinkedIn, Tweakers, ICTerGezocht RSS / API sources</li>
+          <li>Operator console with candidate pipeline + AI match scoring</li>
+          <li>AI outreach drafting with human-approval workflow</li>
+          <li>Azure EU deployment + GDPR compliance baseline</li>
+          <li>Integration with existing SF-ICT calendar &amp; email</li>
+        </ul>
+      </div>
+
+      <div class="phase p2">
+        <div class="phase-label">Phase 2 · Expansion</div>
+        <div class="phase-title">Full Dutch Coverage + ATS</div>
+        <div class="phase-dates">Weeks 7–12</div>
+        <ul class="phase-list">
+          <li>Add GitHub, OfferZen, Magnet.me, Nationale Vacaturebank</li>
+          <li>Optional: Recruitee integration as full ATS</li>
+          <li>Candidate CRM — call lists, notes, scheduled follow-ups</li>
+          <li>Automated coding assessments via HackerRank / TestGorilla</li>
+          <li>Performance analytics: time-to-hire, source ROI</li>
+        </ul>
+      </div>
+
+      <div class="phase p3">
+        <div class="phase-label">Phase 3 · Convergence</div>
+        <div class="phase-title">Bridge to SAGE</div>
+        <div class="phase-dates">Month 4+</div>
+        <ul class="phase-list">
+          <li>Shared AI foundation with SAGE (same Azure OpenAI, same vector store)</li>
+          <li>Internal resource allocation: match engineers to tickets by skill</li>
+          <li>Skills-gap analysis: where should SF-ICT hire next?</li>
+          <li>Client account intelligence fed from recruitment data</li>
+          <li>Unified operator dashboard: recruitment + operations + SAGE</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <b>SF-ICT Talent Engine</b> &nbsp;·&nbsp; Concept demo for SF-ICT B.V. &nbsp;·&nbsp; Prepared by Victor Citroën &nbsp;·&nbsp; Polypus Intelligence &nbsp;·&nbsp; April 2026
+  </div>
+</footer>
+
+<script>
+  // Animate bar fills on load
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.bar-fill').forEach(el => {
+      const w = el.style.width;
+      el.style.width = '0%';
+      setTimeout(() => { el.style.width = w; }, 100);
+    });
+  });
+</script>
+
+</body>
+</html>
